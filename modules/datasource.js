@@ -2,10 +2,12 @@ const mysql    = require('mysql');
 const dbconfig = require(__base + 'config/database');
 let conn;
 
+/** 데이터베이스 설정 */
 module.exports.getInfo = function() {
     return dbconfig;
 };
 
+/** 연결 초기화 */
 module.exports.init = function() {
     if (!conn) {
         
@@ -14,6 +16,7 @@ module.exports.init = function() {
     }
 };
 
+/** Query수행 */
 module.exports.query = function(sql, param, callback) {
     this.init();
     
@@ -40,6 +43,7 @@ module.exports.query = function(sql, param, callback) {
     });
 };
 
+/** Insert문 수행 */
 module.exports.insert = function (tableNm, params, callback) {
     
     if (!tableNm) throw new Error("Table명은 필수 입니다.");
@@ -162,6 +166,7 @@ module.exports.insert = function (tableNm, params, callback) {
     });
 };
 
+/** update문 수행 */
 module.exports.update = function (tableNm, params, where, callback) {
     
     if (!tableNm) throw new Error("Table명은 필수 입니다.");

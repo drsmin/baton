@@ -1,6 +1,7 @@
-//TC_USER 테이블 관련 사용자 객체
+//COM_USER 테이블 관련 사용자 객체
 const datasource = require(global.__base + '/modules/datasource.js');
 
+//로그인
 module.exports.selectLogin = function(userId, userPw, cb) {
     
     datasource.query("SELECT * FROM COM_USER WHERE USER_ID = ? AND USER_PW = PASSWORD(?)", [userId, userPw], function(err, results, fields) {

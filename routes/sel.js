@@ -3,7 +3,7 @@ const passport = require('passport');
 const commUtil = require(global.__base + "/modules/commUtil.js");
 const router = express.Router();
 
-//// 판매 메인
+/** 매 메인 */
 router.get('/selMst', function(req, res, next) {
     
     console.log("cat %s", req.query.cat);
@@ -19,7 +19,7 @@ router.get('/selDtl', function(req, res, next) {
     res.render("sel/selDtl", {"selTitle" : req.query.selTitle});
 });
 
-//// 기본 라우터
+/** 기본 라우터 */
 commUtil.commRoute("sel/", router);
 
 module.exports = router;

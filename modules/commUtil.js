@@ -1,3 +1,4 @@
+//기본 라우트 설
 module.exports.commRoute = function(basePath, router) {
     router.all('/:pass1', function(req, res, next) {
         
