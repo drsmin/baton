@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>동영상 등록</title>
+        <% include sys/inc/_jscss %>
+        <link rel='stylesheet' href='/css/stickyFooter.css' /> 
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("button.close").click(function () {
+                    window.self.close();
+                });
+            });
+        </script>
+    </head>
+<body>
+
+    <header>
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" href="">동영상 등록</a>
+            <button type="button" class="close bg-light" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Begin page content -->
+    <main role="main" class="container">
+        <p class="lead">동영상 등록 팝업입니다.</code></p>
+    </main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <div class="col-sm">
+                <button type="button" class="btn btn-primary">등록</button>
+                <button type="button" class="btn btn-secondary">취소</button>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

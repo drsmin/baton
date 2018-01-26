@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>재능판매</title>
+        <% include sys/inc/_jscss %>
+        <% include com/inc/_starRating %>
+        <script type="text/javascript">
+        
+        </script>
+    </head>
+<body>
+
+<% include sys/inc/_header %>
+
+<% include com/inc/_navCat %>
+
+<% include com/inc/_ad1 %>
+
+    <!-- Begin page content -->
+    <main role="main">
+      <div class="container">
+        <div class="mr30"></div>
+        <h1><%= cat %></h1>
+
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="mr50"></div>
+                <form>
+                    <div class="form-group">
+                        <label for="">언어</label>
+                        <select class="form-control" id="" name="">
+                          <option>한국어</option>
+                          <option>영어</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">가격</label>
+                        <input type="number" class="form-control" id="" name="" placeholder="가격">
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-10 text-center">
+                
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">리뷰순</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">가격순</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">별점순</a>
+                    </li>
+                </ul>
+                <% for (let idx = 0 ; idx < 2 ; idx ++) { %>
+                <div class="mr20"></div>
+                <!-- Three columns of text below the carousel -->
+                <div class="row text-left">
+                    <% for (let jdx = 0 ; jdx < 4 ; jdx++) { %>
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-sm">
+                                <a href="/sel/selDtl?selTitle=제목<%= (idx * jdx +1) %>">
+                                <img class="Thumbnail" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="100%" height="auto" alt="썸네일">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mr10"></div>
+                        <div class="row">
+                            <div class="col-sm">
+                                <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="프리랜서" width="70" height="70"> 판매자<%= ((idx * 4) + jdx + 1) %>
+                            </div>
+                        </div>
+                        <div class="mr10"></div>
+                        <div class="row">
+                            <div class="col-sm">
+                                <a href="/sel/selDtl?selTitle=제목<%= ((idx * 4) + jdx + 1) %>">
+                                저는 아무거나 할 수 있습니다.
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mr10"></div>
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="rating display-only rating-xs">
+                                    <input type="hidden" class="star-rating-input" value="2">
+                                    <% include com/inc/_starRatingSpan %>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                Korean
+                            </div>
+                        </div>
+                    </div><!-- /.col-lg-3 -->
+                    <% } %>
+                </div><!-- /.row -->
+                <% } %>
+                <div class="mr30"></div>
+                <div class="row">
+                    <div class="col-sm">
+                        <nav aria-label="...">
+                          <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                              <span class="page-link">Previous</span>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item active">
+                              <span class="page-link">
+                                2
+                                <span class="sr-only">(current)</span>
+                              </span>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                              <a class="page-link" href="#">Next</a>
+                            </li>
+                          </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+    </main>
+
+<% include sys/inc/_footer %>
+</body>
+</html>

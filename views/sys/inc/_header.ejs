@@ -1,0 +1,43 @@
+<% var isLogin = typeof(locals.__user) != "undefined" ? true : false; %>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand abs" href="/">Baton</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse" id="collapsingNavbar">
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
+        </form>
+        <ul class="navbar-nav ml-auto">
+            <% if (isLogin == false) { %>
+            <li class="nav-item">
+                  <a class="nav-link" href="/com/joinSeller">판매자 등록</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/com/login">로그인</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/com/joinUser">회원가입</a>
+            </li>
+            <% } %>
+            <% if (isLogin) { %>
+            <li class="nav-item">
+                  <a class="nav-link" href="/com/joinSeller">판매자 등록</a>
+            </li>
+            <li class="nav-item">
+                  <a class="nav-link" href="/com/msgMst">메세지</a>
+            </li>
+            <li class="nav-item">
+                  <a class="nav-link" href="/buy/cartMst">장바구니</a>
+            </li>
+            <li class="nav-item">
+                  <a class="nav-link" href="/com/mypage">마이페이지</a>
+            </li>
+            <li class="nav-item">
+                <span class="navbar-text"><%= locals.__user["USER_NM"] %></span>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+</nav>

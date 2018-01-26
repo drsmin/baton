@@ -1,0 +1,54 @@
+<% if(typeof(_message) == 'undefined') {
+        var _message = false; 
+    }
+    console.log("_message [%s]", _message);
+%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>로그인</title>
+        <% include sys/inc/_jscss %>
+        <script type="text/javascript">
+            <% if (_message) { %>
+                alert("<%= _message %>");
+            <% } %>
+        </script>
+    </head>
+<body>
+
+<% include sys/inc/_header %>
+
+    <!-- Begin page content -->
+    <main role="main">
+        <div class="container">
+            <div class="mr30"></div>
+            
+            <div class="row marketing text-center">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4">
+                    <h1>로그인</h1>
+                    <p><i class="fa fa-facebook-official fa-5x" aria-hidden="true"></i></p>
+                    
+                    <p><i class="fa fa-google-plus-official fa-5x" aria-hidden="true"></i></p>
+                    
+                    <p> OR </p>
+                    
+                    <form action="/com/login.do" method="post">
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="userId" name="userId" placeholder="이메일 입력">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="userPw" name="userPw" placeholder="패스워드 입력">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="form-control btn btn-success">로그인</button>
+                        </div>
+                    </form>
+                </div>
+            </div><!--row-->
+        </div> <!-- Container -->
+    </main>
+
+<% include sys/inc/_footer %>
+</body>
+</html>

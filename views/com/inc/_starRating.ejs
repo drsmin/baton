@@ -1,0 +1,28 @@
+    <link rel="stylesheet" href="/css/starRating.css" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+            $('.star-rating').click(function() {
+                
+                let $this = $(this);
+                
+                $this.parents('.rating').find('.star-rating').removeClass('checked');
+                $this.addClass('checked');
+                    
+                var submitStars = $(this).attr('data-value');
+                $this.parents('.rating').find("star-rating-input").val(submitStars);
+            });
+            
+            $('.display-only').css({'pointer-events': 'none'});
+            
+            $('.star-rating-input').change(function() {
+                
+                let $this = $(this);
+                
+                $this.parents('.rating').find('.star-rating[data-value=' + $this.val() + ']').click();
+            });
+            
+            $('.star-rating-input').change();
+            
+        });
+    </script>

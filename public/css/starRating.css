@@ -1,0 +1,36 @@
+.rating {
+    overflow: hidden;
+    display: inline-block;
+    position: relative;
+    font-size:20px;
+    color: #FFCA00;
+}
+
+.rating-xs {
+    font-size : 9pt;
+}
+
+.star-rating {
+    padding: 0 2px;
+    margin: 0;
+    cursor: pointer;
+    display: block;
+    float: right;
+}
+.star-rating:after {
+    position: relative;
+    font-family: FontAwesome;
+    content:'\f006';
+}
+
+.star-rating.checked ~ .star-rating:after,
+.star-rating.checked:after {
+    content:'\f005';
+}
+
+.rating:hover .star-rating:after {content:'\f006';}
+
+.star-rating:hover ~ .star-rating:after, 
+.star-rating:hover:after {
+    content:'\f005' !important;
+}

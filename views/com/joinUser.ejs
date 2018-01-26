@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>회원가입</title>
+        <% include sys/inc/_jscss %>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#div1, #div2").click(function() {
+                    
+                    let val = $(this).val();
+                    let corInfo = $("#corpInfo");
+                    
+                    if ("1" == val) {
+                        corInfo.hide();
+                    } else if ("2" == val) {
+                        corInfo.show();
+                    }
+                    
+                });
+                
+            });
+        
+        </script>
+    </head>
+<body>
+
+<% include sys/inc/_header %>
+
+    <!-- Begin page content -->
+    <main role="main">
+      <div class="container">
+        <div class="mr30"></div>
+        <h1>무료회원가입</h1>
+            <form>
+                <div class="form-group">
+                    <label for="">이메일</label>
+                    <input type="email" class="form-control" id="" name="" aria-describedby="emailHelp" placeholder="이메일">
+                </div>
+                <div class="form-group">
+                    <label for="">비밀번호</label>
+                    <input type="password" class="form-control" id="" name="" placeholder="비밀번호">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">비밀번호 확인</label>
+                    <input type="password" class="form-control" id="" name="" placeholder="비밀번호확인">
+                </div>
+                <div class="form-group">
+                    <label for="">이름</label>
+                    <input type="text" class="form-control" id="" name="" placeholder="이름">
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <label for="">국적</label>
+                        <select class="form-control" id="" name="">
+                            <option>대한민국</option>
+                            <option>미국</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="">언어</label>
+                        <select class="form-control" id="" name="">
+                            <option>한국어</option>
+                            <option>영어</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="">사는곳</label>
+                    <input type="text" class="form-control" id="" name="" placeholder="사는곳">
+                </div>
+                <div class="form-group">
+                    <label for="">생년월일</label>
+                    <input type="date" class="form-control" id="" name="" placeholder="생년월일(년)" />
+                </div>
+                
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="div" id="div1" value="1">
+                    <label class="form-check-label" for="inlineRadio1">개인</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="div" id="div2" value="2">
+                    <label class="form-check-label" for="inlineRadio2">기업</label>
+                </div>
+                
+                <div id="corpInfo" style="display:none">
+                    <div class="form-group">
+                        <label for="">회사명</label>
+                        <input type="text" class="form-control" id="" name="" placeholder="회사명">
+                    </div>
+                    <div class="form-group">
+                        <label for="">사업자등록번호</label>
+                        <input type="text" class="form-control" id="" name="" placeholder="사업자등록번호">
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <div class="col-sm-12 text-right">
+                        <button type="submit" class="btn btn-primary">회원가입</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+<% include sys/inc/_footer %>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>메세지 내역</title>
+        <% include sys/inc/_jscss %>
+    </head>
+<body>
+
+<% include sys/inc/_header %>
+
+    <!-- Begin page content -->
+    <main role="main">
+      <div class="container">
+        <div class="mr30"></div>
+        <h1>메세지 내역</h1>
+            <div class="row">
+                <div class="col-sm-8">
+                    <form class="form-inline">
+                        <div class="form-check mb-2 mr-sm-2">
+                            <select class="form-control" id="exampleFormControlSelect1">
+                                <option></option>
+                                <option>전체선택</option>
+                                <option>전체선택해제</option>
+                            </select>
+                        </div>
+                        <div class="input-group mb-2 mr-sm-2">
+                            <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="상대방닉네임">
+                        </div>
+                    
+                        <button type="submit" class="btn btn-primary mb-2"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </form>
+                    
+                </div>
+                <div class="col-sm-4 text-right">
+                    응답율 0%
+                </div>
+            </div> <!--row -->
+            <table class="table table-bordered">
+                <tbody>
+                    <% for (let idx = 1 ; idx < 10 ; idx++) { %>
+                    <tr>
+                        <th scope="row"><input type="checkbox" /></th>
+                        <td>사용자<%= idx + 1 %></td>
+                        <td>메세지 내용</td>
+                        <td><%= idx + 1 %>일전</td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+            <nav aria-label="...">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item active">
+                        <span class="page-link">
+                            2
+                            <span class="sr-only">(current)</span>
+                        </span>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+      </div>
+    </main>
+
+<% include sys/inc/_footer %>
+</body>
+</html>

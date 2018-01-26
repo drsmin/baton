@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel='stylesheet' href='/css/style.css' />
+    <title>WebSocket Chat Client</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript">
+            function log(text, div) {
+                
+                var hLog;
+                
+                if (!div) {
+                
+                    hLog = document.getElementById("log");
+                } else {
+                    hLog = document.getElementById(div);
+                }
+
+                
+                hLog.innerHTML = (new Date).getTime() + ": " + (text ? text : "null") + hLog.innerHTML;
+            }
+    
+        function init() {
+            
+            
+
+            if (!window.WebSocket) {
+                log("WebSocket not natively supported");
+                
+            } else {
+                log("Using browser's native WebSocket implementation")
+            }
+
+            var ws;
+
+            document.getElementById("connect").onclick = function(e) {
+                
+                var sUrl = "ws://" + document.location.href.replace("http://", "");
+                
+                document.getElementById("uri").value = sUrl;
+                
+                ws = new WebSocket(sUrl);
+                ws.onopen = function(e) {
+                    log("[WebSocket#onopen]\n");
+                }
+                ws.onmessage = function(e) {
+                    log("[WebSocket#onmessage] Message: '" + e.data + "'\n", "tRecv");
+                }
+                ws.onclose = function() {
+                    log("[WebSocket#onclose]\n");
+                    ws = null;
+                }
+            };
+
+            document.getElementById("btnSend").onclick = function(e) {
+                if (ws) {
+                    var textField = document.getElementById("textField");
+                    ws.send(textField.value);
+                    log("[WebSocket#send]      Send:    '" + textField.value + "'\n", "tSend");
+                    textField.value = "";
+                    textField.focus();
+                }
+            };
+
+            document.getElementById("disconnect").onclick = function(e) {
+                if (ws) {
+                    ws.close();
+                }
+                
+            };
+                            document.getElementById("connect").onclick();
+        }
+    </script>
+  </head>
+  <body onload="init()">
+      <form id="uriForm"><input type="text" id="uri" value="" style="width:200px;"> <input type="button" id="connect" value="Connect"><input type="button" id="disconnect" value="Disconnect"></form><br>
+      <form id="sendForm" onsubmit="return false;"><input type="text" id="textField" value="" style="width:200px;"> <input id="btnSend" type="submit" value="Send"></form><br>
+      <textarea id="tSend" rows="30" cols="100" style="color:blue;"></textarea>
+      <textarea id="tRecv" rows="30" cols="100" style="color:blue;"></textarea>
+      <textarea id="log" rows="30" cols="100" style="color:blue;"></textarea>
+  </body>
+</html> 

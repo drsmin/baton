@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>오류발생</title>
+        <% include sys/inc/_jscss %>
+        <script type="text/javascript">
+        
+        </script>
+    </head>
+<body>
+
+<% include sys/inc/_header %>
+
+    <!-- Begin page content -->
+    <main role="main">
+        <div class="container">
+            <div class="mr30"></div>
+            <h1>오류발생</h1>
+            
+            <h2><%= message %></h2>
+            <h3><%= error.status %></h3>
+            <pre><%= error.stack %></pre>
+        
+        </div>
+    </main>
+
+<% include sys/inc/_footer %>
+</body>
+</html>

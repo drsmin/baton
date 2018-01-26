@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>메세지 전송</title>
+        <% include sys/inc/_jscss %>
+        <link rel='stylesheet' href='/css/stickyFooter.css' /> 
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("button.close").click(function () {
+                    window.self.close();
+                });
+            });
+        </script>
+    </head>
+<body>
+
+    <header>
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" href="">메세지 전송</a>
+            <button type="button" class="close bg-light" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Begin page content -->
+    <main role="main" class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                상대방 프로필
+            </div>
+            <div class="col-sm-9">
+                현재 시간 : 2018-01-01 09:00 월요일   평균 응답 시간 : 1 시간
+                <div class="mr10"></div>
+                <textarea class="form-control" width="100%" rows="15"></textarea>
+                <hr/>
+                <div class="text-right">
+                    <button type="button" class="btn-success"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </div> <!---row-->
+    </main>
+
+    <footer class="footer">
+        <div class="col-sm text-right">
+            <button type="button" class="btn btn-primary">전송</button>
+            <button type="button" class="btn btn-secondary">취소</button>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Table List</title>
+    <link rel='stylesheet' href='/css/style.css' />
+  </head>
+  <body>
+    <h1>Table List</h1>
+    <ul>
+        <% for(var key in result){ %>
+            <li><%= result[key][Object.keys(result[key])[0]] %></li>
+        <% }%>
+    </ul>
+    <p><%= message %></p>
+  </body>
+</html>
