@@ -51,6 +51,13 @@ app.use(function(req, res, next) {
   
     res.locals.__user = req.user;
     res.locals.__isLogin = (req.user) ? true : false;
+    res.locals.__isAdmin = false;
+    
+    if (req.user) {
+        if ("90" == req.user["USER_ROLE_CD"]) {
+            res.locals.__isAdmin = true;
+        }
+    }
     
     //console.log("session 처리 : " + JSON.stringify(req.user));
     

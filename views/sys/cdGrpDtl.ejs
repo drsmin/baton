@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>코드 그룹 <%= procDiv == "C" ? "등록" : "수정" %></title>
+        <% include sys/inc/_jscss %>
+    </head>
+<body>
+
+<% include sys/inc/_header %>
+
+    <!-- Begin page content -->
+    <main role="main">
+      <div class="container">
+        <div class="mr30"></div>
+        <h1>코드 그룹 <%= procDiv == "C" ? "등록" : "수정" %></h1>
+            <div class="mr20"></div>
+
+            <form method="post">
+                <input type="hidden" name="procDiv" value="<%= procDiv %>" />
+                <input type="hidden" name="O_CD_GRP" value="<%= item["CD_GRP"] %>" />
+                <div class="form-group">
+                    <label for="">코드 그룹</label>
+                    <input type="text" class="form-control" id="CD_GRP" name="CD_GRP" placeholder="코드 그룹" required value="<%= item["CD_GRP"] %>" />
+                </div>
+                <div class="form-group">
+                    <label for="">코드 그룹명</label>
+                    <input type="text" class="form-control" id="CD_GRP_NM" name="CD_GRP_NM" placeholder="코드 그룹 명" required value="<%= item["CD_GRP_NM"] %>" />
+                </div>
+                <div class="form-group">
+                    <label for="">상위 코드 그룹</label>
+                    <input type="text" class="form-control" id="HIGH_CD_GRP" name="HIGH_CD_GRP" placeholder="상위 코드 그룹" value="<%= item["HIGH_GRP"] %>" />
+                </div>
+                
+                <div class="form-group row">
+                    <div class="col-sm-12 text-right">
+                        <button type="submit" class="btn btn-primary">저장</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </main>
+
+<% include sys/inc/_footer %>
+</body>
+</html>

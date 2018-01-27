@@ -1,15 +1,233 @@
-const express = require('express');
+const express  = require('express');
 const commUtil = require(global.__base + "/modules/commUtil.js");
-const router = express.Router();
+const router   = express.Router();
+const sysCdGrp = require(global.__base + '/model/sys/sysCdGrp.js');
+const sysCdDtl = require(global.__base + '/model/sys/sysCdDtl.js');
 
 /** 코드 관리 */
-const cdMngt = function(req, res, next) {
-    res.render("sys/cdMngt");
+router.get('/cdMngt', function(req, res, next) {
     
-}
+    if (!req.query.CD_GRP) {
+        throw new Error('인수 [코드 그룹] 이 없습니다');
+    }
+    
+    let cdGrp = req.query.CD_GRP;
+    
+    sysCdDtl.selectList(cdGrp, function(err, results, fields) {
+        
+        if (err) {
+            throw new Error(err);
+        }
+        
+        res.render("sys/cdMngt", {"CD_GRP" :  cdGrp, "list" : results});
+        
+    });
 
-router.get('/cdMngt', cdMngt);
-router.post('/cdMngt', cdMngt);
+});
+
+/** 코드 상세 등록/수정 */
+router.get('/cdDtl', function(req, res, next) {
+
+    if (!req.query.procDiv) {
+        throw new Error('인수 [처리 구분] 이 없습니다');
+    }
+    
+    if (!req.query.CD_GRP) {
+        throw new Error('인수 [코드 그룹] 이 없습니다');
+    }
+    
+    let procDiv = req.query.procDiv;
+    let cdGrp  = req.query.CD_GRP;
+
+    if ("C" == procDiv) {
+        
+        res.render("sys/cdDtl", {"procDiv" : procDiv, "CD_GRP" : cdGrp, "item" : {}});
+        
+    } else if ("U" == procDiv) {
+    
+        if (!req.query.CD_VAL) {
+            throw new Error('인수 [코드 값] 이 없습니다');
+        }
+        
+        let cdVal = req.query.CD_VAL;
+    
+        sysCdDtl.select(cdGrp, cdVal, function(err, results, fields) {
+            
+            if (err) {
+                throw new Error(err);
+            }
+            
+            if (results.length <= 0) {
+                throw new Error(cdGrp + " 코드 데이터가 존재 하지 않습니다");
+            }
+            
+            res.render("sys/cdDtl", {"procDiv" : procDiv, "CD_GRP" : cdGrp, "item" : results[0]});
+            
+        });
+    } else if ("D" == procDiv) {
+        
+        let where = {};
+        where["CD_GRP"] = req.query.CD_GRP;
+        where["CD_VAL"] = req.query.CD_VAL;
+        
+        sysCdDtl.delete(where, function(err, results, fields) {
+            
+            if (err) {
+                throw new Error(err);
+            }
+            
+            res.redirect("/sys/cdMngt?CD_GRP=" + req.query.CD_GRP );
+            
+        });
+    }
+
+});
+
+/** 코드 상세 등록/수정 처리 */
+router.post('/cdDtl', function(req, res, next) {
+
+    if (!req.body.procDiv) {
+        throw new Error('인수 [처리 구분] 이 없습니다');
+    }
+    
+    let procDiv = req.query.procDiv;
+
+    //Validation
+    if (!req.body.O_CD_GRP) {
+        throw new Error('필수 항목 [코드 그룹] 이 없습니다');
+    }
+    
+    req.body["CD_GRP"] = req.body.O_CD_GRP;
+    
+    if ("C" == procDiv) {
+        
+        sysCdDtl.insert(req.body, function(err, results, fields) {
+            
+            if (err) {
+                throw new Error(err);
+            }
+            
+            res.redirect("/sys/cdMngt?CD_GRP=" + req.body.O_CD_GRP );
+            
+        });
+        
+    } else if ("U" == procDiv) {
+    
+        let where = {};
+        where["CD_GRP"] = req.body.O_CD_GRP;
+        where["CD_VAL"] = req.body.O_CD_VAL;
+    
+        sysCdDtl.update(req.body, where, function(err, results, fields) {
+            
+            if (err) {
+                throw new Error(err);
+            }
+            
+            res.redirect("/sys/cdMngt?CD_GRP=" + req.body.O_CD_GRP );
+            
+        });
+    }
+
+});
+
+
+/** 코드 그룹 관리 */
+router.get('/cdGrpMngt', function(req, res, next) {
+
+    sysCdGrp.selectList(function(err, results, fields) {
+        
+        if (err) {
+            throw new Error(err);
+        }
+        
+        res.render("sys/cdGrpMngt", {"list" : results});
+        
+    });
+});
+
+/** 코드 그룹 등록/수정 */
+router.get('/cdGrpDtl', function(req, res, next) {
+
+    if (!req.query.procDiv) {
+        throw new Error('인수 [처리 구분] 이 없습니다');
+    }
+    
+    let procDiv = req.query.procDiv;
+
+    if ("C" == procDiv) {
+        res.render("sys/cdGrpDtl", {"procDiv" : procDiv, "item" : {}});
+    } else if ("U" == procDiv) {
+    
+        if (!req.query.CD_GRP) {
+            throw new Error('인수 [코드 그룹] 이 없습니다');
+        }
+        
+        let cdGrp = req.query.CD_GRP;
+    
+        sysCdGrp.select(cdGrp, function(err, results, fields) {
+            
+            if (err) {
+                throw new Error(err);
+            }
+            
+            if (results.length <= 0) {
+                throw new Error(cdGrp + " 코드 그룹 데이터가 존재 하지 않습니다");
+            }
+            
+            res.render("sys/cdGrpDtl", {"procDiv" : procDiv, "item" : results[0]});
+            
+        });
+    }
+
+});
+
+/** 코드그룹 등록/수정 처리 */
+router.post('/cdGrpDtl', function(req, res, next) {
+
+    if (!req.body.procDiv) {
+        throw new Error('인수 [처리 구분] 이 없습니다');
+    }
+    
+    let procDiv = req.query.procDiv;
+
+    //Validation
+    if (!req.body.CD_GRP) {
+        throw new Error('필수 항목 [코드 그룹] 이 없습니다');
+    }
+    
+    if (!req.body.CD_GRP_NM) {
+        throw new Error('필수 항목 [코드 그룹명] 이 없습니다');
+    }
+
+    if ("C" == procDiv) {
+        
+        sysCdGrp.insert(req.body, function(err, results, fields) {
+            
+            if (err) {
+                throw new Error(err);
+            }
+            
+            res.redirect("/sys/cdGrpMngt");
+            
+        });
+        
+    } else if ("U" == procDiv) {
+    
+        let where = {};
+        where["CD_GRP"] = req.body.O_CD_GRP;
+    
+        sysCdGrp.update(req.body, where, function(err, results, fields) {
+            
+            if (err) {
+                throw new Error(err);
+            }
+            
+            res.redirect("/sys/cdGrpMngt");
+            
+        });
+    }
+
+});
 
 /** 기본 라우터 */
 commUtil.commRoute("sys/", router);

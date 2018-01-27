@@ -1,4 +1,3 @@
-<% var isLogin = typeof(locals.__user) != "undefined" ? true : false; %>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand abs" href="/">Baton</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
@@ -10,7 +9,7 @@
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
         </form>
         <ul class="navbar-nav ml-auto">
-            <% if (isLogin == false) { %>
+            <% if (locals.__isLogin == false) { %>
             <li class="nav-item">
                   <a class="nav-link" href="/com/joinSeller">판매자 등록</a>
             </li>
@@ -21,7 +20,7 @@
                 <a class="nav-link" href="/com/joinUser">회원가입</a>
             </li>
             <% } %>
-            <% if (isLogin) { %>
+            <% if (locals.__isLogin == true) { %>
             <li class="nav-item">
                   <a class="nav-link" href="/com/joinSeller">판매자 등록</a>
             </li>
@@ -36,6 +35,11 @@
             </li>
             <li class="nav-item">
                 <span class="navbar-text"><%= locals.__user["USER_NM"] %></span>
+            </li>
+            <% } %>
+            <% if (locals.__isAdmin) { %>
+            <li class="nav-item">
+                <a class="nav-link" href="/sys/admin">관리자</a>
             </li>
             <% } %>
         </ul>

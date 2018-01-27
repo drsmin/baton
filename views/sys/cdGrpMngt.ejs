@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>코드 관리</title>
+        <title>코드 그룹 관리</title>
         <% include sys/inc/_jscss %>
         <script type="text/javascript">
             $(document).ready(function () {
@@ -9,7 +9,7 @@
                     
                     let _this = $(this);
                     
-                    location.href = "/sys/cdDtl?procDiv=U&CD_GRP=" + _this.attr("keyVal") + "&CD_VAL=" + _this.attr("keyVal2");
+                    location.href = "/sys/cdGrpDtl?procDiv=U&CD_GRP=" + _this.attr("keyVal");
                 });
             });
         </script>
@@ -22,10 +22,9 @@
     <main role="main">
       <div class="container">
         <div class="mr30"></div>
-        <h1>코드 관리</h1>
-        <h2>코드 그룹 - <%= CD_GRP %></h2>
+        <h1>코드 그룹 관리</h1>
             <div class="col-sm text-right">
-                <button type="button" class="btn btn-success" onclick="location.href='/sys/cdDtl?procDiv=C&CD_GRP=<%= CD_GRP %>'" >신규등록</button>
+                <button type="button" class="btn btn-success" onclick="location.href='/sys/cdGrpDtl?procDiv=C'" >신규등록</button>
             </div>
             <div class="mr20"></div>
             <div class="col-sm">
@@ -33,28 +32,26 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">코드</th>
-                            <th scope="col">코드명</th>
-                            <th scope="col">정렬순서</th>
-                            <th scope="col">사용여부</th>
+                            <th scope="col">코드그룹</th>
+                            <th scope="col">그룹명</th>
+                            <th scope="col">상위그룹</th>
                             <th scope="col">#</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% if (list.length == 0) { %>
                         <tr>
-                            <td class="text-center" colspan="6" scope="row">검색 결과가 없습니다</td>
+                            <td class="text-center" colspan="5" scope="row">검색 결과가 없습니다</td>
                         </tr>
                         <% } else {
                             for (let idx = 0, _max = list.length ; idx < _max ; idx ++) {
                                 let row = list[idx]; %>
-                        <tr style="cursor:pointer;" keyVal="<%= row["CD_GRP"] %>" keyVal2="<%= row["CD_VAL"] %>">
+                        <tr style="cursor:pointer;" keyVal="<%= row["CD_GRP"] %>">
                             <th scope="row" class="text-center"><%= idx + 1 %></th>
-                            <td><%= row["CD_VAL"] %></td>
-                            <td><%= row["CD_NM"] %></td>
-                            <td><%= row["DSP_SEQ"] %></td>
-                            <td><%= row["USE_YN"] %></td>
-                            <td><button type="button" class="btn btn-danger" onclick="location.href='/sys/cdDtl?procDiv=D&CD_GRP=<%=row["CD_GRP"] %>&CD_VAL=<%=row["CD_VAL"] %>'"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                            <td><%= row["CD_GRP"] %></td>
+                            <td><%= row["CD_GRP_NM"] %></td>
+                            <td><%= row["HIGH_GRP"] %></td>
+                            <td><button type="button" class="btn btn-success" onclick="location.href='/sys/cdMngt?CD_GRP=<%=row["CD_GRP"] %>'">코드 관리</button></td>
                         </tr>
                         <% } 
                         } %>

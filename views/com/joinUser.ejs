@@ -5,14 +5,14 @@
         <% include sys/inc/_jscss %>
         <script type="text/javascript">
             $(document).ready(function () {
-                $("#div1, #div2").click(function() {
+                $("#USER_DIV_CD_01, #USER_DIV_CD_02").click(function() {
                     
                     let val = $(this).val();
                     let corInfo = $("#corpInfo");
                     
-                    if ("1" == val) {
+                    if ("10" == val) {
                         corInfo.hide();
-                    } else if ("2" == val) {
+                    } else if ("20" == val) {
                         corInfo.show();
                     }
                     
@@ -31,65 +31,74 @@
       <div class="container">
         <div class="mr30"></div>
         <h1>무료회원가입</h1>
-            <form>
+            <form method="post">
                 <div class="form-group">
                     <label for="">이메일</label>
-                    <input type="email" class="form-control" id="" name="" aria-describedby="emailHelp" placeholder="이메일">
+                    <input type="email" class="form-control" id="EMAL_ADDR" name="EMAL_ADDR" aria-describedby="emailHelp" placeholder="이메일" required />
                 </div>
                 <div class="form-group">
                     <label for="">비밀번호</label>
-                    <input type="password" class="form-control" id="" name="" placeholder="비밀번호">
+                    <input type="password" class="form-control" id="USER_PW" name="USER_PW" placeholder="비밀번호" required />
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">비밀번호 확인</label>
-                    <input type="password" class="form-control" id="" name="" placeholder="비밀번호확인">
+                    <input type="password" class="form-control" id="USER_PW2" name="USER_PW2" placeholder="비밀번호확인" required />
                 </div>
                 <div class="form-group">
                     <label for="">이름</label>
-                    <input type="text" class="form-control" id="" name="" placeholder="이름">
+                    <input type="text" class="form-control" id="USER_NM" name="USER_NM" placeholder="이름" required />
                 </div>
                 <div class="form-row">
                     <div class="col-sm-6">
                         <label for="">국적</label>
-                        <select class="form-control" id="" name="">
-                            <option>대한민국</option>
-                            <option>미국</option>
+                        <select class="form-control" id="NATI_CD" name="NATI_CD">
+                            <% for (let idx = 0, _max = natiCd.length ; idx < _max ; idx ++) {
+                                let item = natiCd[idx]; %>
+                            <option value="<%= item["CD_VAL"] %>"><%= item["CD_NM"] %></option>
+                            <% } %>
                         </select>
                     </div>
                     <div class="col-sm-6">
                         <label for="">언어</label>
-                        <select class="form-control" id="" name="">
-                            <option>한국어</option>
-                            <option>영어</option>
+                        <select class="form-control" id="LNGG_CD" name="LNGG_CD">
+                            <% for (let idx = 0, _max = lnggCd.length ; idx < _max ; idx ++) {
+                                let item = lnggCd[idx]; %>
+                            <option value="<%= item["CD_VAL"] %>"><%= item["CD_NM"] %></option>
+                            <% } %>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="">사는곳</label>
-                    <input type="text" class="form-control" id="" name="" placeholder="사는곳">
+                    <input type="text" class="form-control" id="LIVE_AREA" name="LIVE_AREA" placeholder="사는곳">
                 </div>
                 <div class="form-group">
                     <label for="">생년월일</label>
-                    <input type="date" class="form-control" id="" name="" placeholder="생년월일(년)" />
+                    <input type="date" class="form-control" id="BITH" name="BITH" placeholder="생년월일" />
+                </div>
+                <div class="form-group">
+                    <label for="">휴대폰 번호</label>
+                    <input type="tel" class="form-control" id="CPHN_NO" name="CPHN_NO" placeholder="휴대폰번호" />
+                    
                 </div>
                 
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="div" id="div1" value="1">
-                    <label class="form-check-label" for="inlineRadio1">개인</label>
+                    <input class="form-check-input" type="radio" name="USER_DIV_CD" id="USER_DIV_CD_01" value="10" checked />
+                    <label class="form-check-label" for="USER_DIV_CD_01">개인</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="div" id="div2" value="2">
-                    <label class="form-check-label" for="inlineRadio2">기업</label>
+                    <input class="form-check-input" type="radio" name="USER_DIV_CD" id="USER_DIV_CD_02" value="20" />
+                    <label class="form-check-label" for="USER_DIV_CD_02">기업</label>
                 </div>
                 
                 <div id="corpInfo" style="display:none">
                     <div class="form-group">
                         <label for="">회사명</label>
-                        <input type="text" class="form-control" id="" name="" placeholder="회사명">
+                        <input type="text" class="form-control" id="CORP_NM" name="CORP_NM" placeholder="회사명" />
                     </div>
                     <div class="form-group">
                         <label for="">사업자등록번호</label>
-                        <input type="text" class="form-control" id="" name="" placeholder="사업자등록번호">
+                        <input type="text" class="form-control" id="BIZ_REG_NO" name="BIZ_REG_NO" placeholder="사업자등록번호">
                     </div>
                 </div>
                 

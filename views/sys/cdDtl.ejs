@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>코드 상세 <%= procDiv == "C" ? "등록" : "수정" %></title>
+        <% include sys/inc/_jscss %>
+    </head>
+<body>
+
+<% include sys/inc/_header %>
+
+    <!-- Begin page content -->
+    <main role="main">
+      <div class="container">
+        <div class="mr30"></div>
+        <h1>코드 상세 <%= procDiv == "C" ? "등록" : "수정" %></h1>
+            <div class="mr20"></div>
+
+            <form method="post">
+                <input type="hidden" name="procDiv" value="<%= procDiv %>" />
+                <input type="hidden" name="O_CD_GRP" value="<%= CD_GRP %>" />
+                <input type="hidden" name="O_CD_VAL" value="<%= item["CD_VAL"] %>" />
+                <div class="form-group">
+                    <label for="">코드 그룹</label>
+                    <h3><%= CD_GRP %></h3>
+                </div>
+                <div class="form-group">
+                    <label for="">코드 값</label>
+                    <input type="text" class="form-control" id="CD_VAL" name="CD_VAL" placeholder="코드 값" required value="<%= item["CD_VAL"] %>" />
+                </div>
+                <div class="form-group">
+                    <label for="">코드 명</label>
+                    <input type="text" class="form-control" id="CD_NM" name="CD_NM" placeholder="코드 명" value="<%= item["CD_NM"] %>" />
+                </div>
+                <div class="form-group">
+                    <label for="">표시 순서</label>
+                    <input type="number" class="form-control" id="DSP_SEQ" name="DSP_SEQ" placeholder="표시 순서" value="<%= item["DSP_SEQ"] %>" />
+                </div>
+                <div class="form-group">
+                    <label for="">사용 여부</label>
+                    <select class="form-control" id="USE_YN" name="USE_YN">
+                        <option <%= item["USE_YN"] == "Y" ? 'selected' : '' %> value="Y">Y</option>
+                        <option <%= item["USE_YN"] == "N" ? 'selected' : '' %> value="N">N</option>
+                    </select>
+                </div>
+                
+                <div class="form-group row">
+                    <div class="col-sm-12 text-right">
+                        <button type="submit" class="btn btn-primary">저장</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </main>
+
+<% include sys/inc/_footer %>
+</body>
+</html>

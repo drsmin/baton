@@ -195,7 +195,7 @@ module.exports.update = function (tableNm, params, where, callback) {
     
     idx = 0;
     
-    for (var key in where) {
+    for (let key in where) {
         if (idx != 0) {
             sql += " AND ";
         }
@@ -229,6 +229,76 @@ module.exports.update = function (tableNm, params, where, callback) {
     }
         
     console.log("= EXECUTE UPDATE =======================");
+    console.log("TABLE : " + tableNm);
+    console.log("SQL : " + sSql);
+    console.log("PARAM : " + JSON.stringify(ssParam) + (isMoreParam ? "...(최대 표시 갯수 : " + maxParamCnt + ")" : ""));
+
+    conn.query(sql, sParam, function(err, results, fields) {
+        
+        if (!err) {
+            console.log("RESULT : " + JSON.stringify(results));
+        }
+        
+        if (err) {
+            console.log("ERROR : " + err);
+        }
+
+        console.log("=======================================");
+
+        if (callback) {
+            
+            callback(err, results, fields);
+        }
+    });
+};
+
+/** delete문 수행 */
+module.exports.delete = function (tableNm, where, callback) {
+    
+    if (!tableNm) throw new Error("Table명은 필수 입니다.");
+    if (!where) throw new Error("Where 조건은 필수 입니다.");
+    
+    var sParam = [];
+    var sql = "DELETE FROM ?? WHERE ";
+    
+    sParam.push(tableNm);
+    
+    idx = 0;
+    
+    for (let key in where) {
+        if (idx != 0) {
+            sql += " AND ";
+        }
+        
+        sql += key + " = ?";
+        sParam.push(where[key]);
+        
+        idx++;
+    }
+    
+    this.init();
+    
+    var sSql;
+    var ssParam;
+    var maxSqlCnt = 300;
+    var maxParamCnt = 30;
+    
+    if (sql.length > maxSqlCnt) {
+        sSql = sql.substring(0, maxSqlCnt) + "...(최대 표시 글자 : " + maxSqlCnt + ")";
+    } else {
+        sSql = sql;
+    }
+    
+    var isMoreParam = false;
+    
+    if (sParam.length > maxParamCnt) {
+        ssParam = sParam.slice(1, maxParamCnt);
+        isMoreParam = true;
+    } else {
+        ssParam = sParam;
+    }
+        
+    console.log("= EXECUTE DELETE =======================");
     console.log("TABLE : " + tableNm);
     console.log("SQL : " + sSql);
     console.log("PARAM : " + JSON.stringify(ssParam) + (isMoreParam ? "...(최대 표시 갯수 : " + maxParamCnt + ")" : ""));
