@@ -17,17 +17,42 @@ module.exports.commRoute = function(basePath, router) {
     });
 };
 
-/** 공통 코드 조회 */
+/** 공통 코드 조회 defferd 패턴 */
 module.exports.getCdList = function(cdGrp, callback) {
     
-    sysCdDtl.selectList(cdGrp, function (err, results, fields) {
-        
-        if (err) {
-            callback(err);
-        }
-        
-        console.log(cdGrp + " / " + JSON.stringify(results));
-        
-        callback(null, results);
+    var promise = new Promise(function (resolve, reject) {
+
+        sysCdDtl.selectList(cdGrp, function (err, results, fields) {
+            
+            if (err) {
+                reject(err);
+            }
+            
+            console.log(cdGrp + " / " + JSON.stringify(results));
+            
+            resolve(results);
+        });
     });
+    
+    return promise;
 }
+
+/** 로그인 여부 확인 middleware */
+module.exports.chkLogin = function (req, res, next) {
+    if (res.locals.__isLogin) {
+        return next();
+    }
+
+    req.flash("__msg", "로그인 후 사용 가능합니다");
+    res.redirect('/com/login');
+};
+
+/** 관리자 여부 확인 middleware */
+module.exports.chkAdmin = function (req, res, next) {
+    if (res.locals.__isAdmin) {
+        return next();
+    }
+    
+    req.flash("__msg", "관리자만 사용 가능합니다");
+    res.redirect('/');
+};

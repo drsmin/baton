@@ -29,27 +29,27 @@ router.get('/joinUser', function(req, res, next) {
     if (true == res.locals.__isLogin) {
         res.redirect("/");
     }
-    
-    commUtil.getCdList("LNGG_CD", function (err, results) {
-        
-        if (err) {
-            throw new Error(err);
-        }
-        
-        let lnggCd = results;
-        
-        commUtil.getCdList("NATI_CD", function (err, results) {
-        
-            if (err) {
-                throw new Error(err);
-            }
-            
-            let natiCd = results;
-            
-            res.render('com/joinUser', {"lnggCd" : lnggCd, "natiCd" : natiCd });
-        
-        });
+   
+    let lnggCd;
+    var promise1 = commUtil.getCdList("LNGG_CD").then(function (results) {
+       
+        lnggCd = results;
+       
     });
+   
+    let natiCd;
+    var promise2 = commUtil.getCdList("NATI_CD").then(function (results) {
+       
+        natiCd = results;
+
+    });
+   
+    Promise.all([promise1, promise2]).then(function () {
+	   
+        res.render('com/joinUser', {"lnggCd" : lnggCd, "natiCd" : natiCd });
+    });
+   
+
         
 });
 
@@ -58,12 +58,26 @@ router.post("/joinUser", function (req, res, next) {
     
     req.body["USER_ID"] = req.body.EMAL_ADDR;
     
-    comUser.insert(req.body, function(err, results){
+    comUser.insert(req.body, function(err, results) {
+        
+        if(err) {
+            return next(err);
+        }
+        
+        req.flash("__msg", "회원 가입이 완료 되었습니다");
+        
         res.redirect("/");
     });
     
 });
 
+/** 이메일 중복 체크 */
+router.post("/chkDupEmalAddr", function (req, res, next) {
+    
+    comUser.chkDupEmalAddr(req.body.EMAL_ADDR).then(function (results) {
+        res.send(results);
+    });
+});
 
 /** 기본 라우터 */
 commUtil.commRoute("com/", router);

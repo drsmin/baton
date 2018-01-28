@@ -1,3 +1,9 @@
 <% include sys/inc/_jquery %>
 <% include sys/inc/_bootstrap %>
+<script src="/js/comm.js"></script>
+<% if(null != locals.__msg) { %>
+    <script type="text/javascript">
+        alert("<%= locals.__msg %>");
+    </script>
+<% } %>
 

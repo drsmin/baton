@@ -5,7 +5,7 @@ const sysCdGrp = require(global.__base + '/model/sys/sysCdGrp.js');
 const sysCdDtl = require(global.__base + '/model/sys/sysCdDtl.js');
 
 /** 코드 관리 */
-router.get('/cdMngt', function(req, res, next) {
+router.get('/cdMngt', commUtil.chkAdmin, function(req, res, next) {
     
     if (!req.query.CD_GRP) {
         throw new Error('인수 [코드 그룹] 이 없습니다');
@@ -26,7 +26,7 @@ router.get('/cdMngt', function(req, res, next) {
 });
 
 /** 코드 상세 등록/수정 */
-router.get('/cdDtl', function(req, res, next) {
+router.get('/cdDtl', commUtil.chkAdmin, function(req, res, next) {
 
     if (!req.query.procDiv) {
         throw new Error('인수 [처리 구분] 이 없습니다');
@@ -84,7 +84,7 @@ router.get('/cdDtl', function(req, res, next) {
 });
 
 /** 코드 상세 등록/수정 처리 */
-router.post('/cdDtl', function(req, res, next) {
+router.post('/cdDtl', commUtil.chkAdmin, function(req, res, next) {
 
     if (!req.body.procDiv) {
         throw new Error('인수 [처리 구분] 이 없습니다');
@@ -130,9 +130,8 @@ router.post('/cdDtl', function(req, res, next) {
 
 });
 
-
 /** 코드 그룹 관리 */
-router.get('/cdGrpMngt', function(req, res, next) {
+router.get('/cdGrpMngt', commUtil.chkAdmin, function(req, res, next) {
 
     sysCdGrp.selectList(function(err, results, fields) {
         
@@ -146,7 +145,7 @@ router.get('/cdGrpMngt', function(req, res, next) {
 });
 
 /** 코드 그룹 등록/수정 */
-router.get('/cdGrpDtl', function(req, res, next) {
+router.get('/cdGrpDtl', commUtil.chkAdmin, function(req, res, next) {
 
     if (!req.query.procDiv) {
         throw new Error('인수 [처리 구분] 이 없습니다');
@@ -182,7 +181,7 @@ router.get('/cdGrpDtl', function(req, res, next) {
 });
 
 /** 코드그룹 등록/수정 처리 */
-router.post('/cdGrpDtl', function(req, res, next) {
+router.post('/cdGrpDtl', commUtil.chkAdmin, function(req, res, next) {
 
     if (!req.body.procDiv) {
         throw new Error('인수 [처리 구분] 이 없습니다');
