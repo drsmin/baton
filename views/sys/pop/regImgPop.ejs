@@ -4,11 +4,43 @@
         <title>이미지 등록</title>
         <% include sys/inc/_jscss %>
         <link rel='stylesheet' href='/css/stickyFooter.css' /> 
+        <link rel='stylesheet' href='/css/cropper.min.css' /> 
+        <script src="/js/cropper.min.js"></script>
         <script type="text/javascript">
-            $(document).ready(function() {
+            $(function() {
                 $("button.close").click(function () {
                     window.self.close();
                 });
+                
+                  var $image = $("#previewImage");
+                  var $input = $("[name='croppResult']");
+                
+                  $("input:file").change(function() {
+                    var oFReader = new FileReader();
+                
+                    oFReader.readAsDataURL(this.files[0]);
+                
+                    oFReader.onload = function (oFREvent) {
+                
+                      // Destroy the old cropper instance
+                      $image.cropper('destroy');
+                
+                      // Replace url
+                      $image.attr('src', this.result);
+                
+                      // Start cropper
+                      $image.cropper({
+                        aspectRatio: 1,
+                        movable: false,
+                        zoomable: false,
+                        rotatable: false,
+                        scalable: false,
+                        crop: function(e) {
+                          $input.val(e.x + ", " + e.y +"," + e.width + "," + e.height);
+                        }
+                      });
+                    };
+                  });
             });
         </script>
     </head>
@@ -26,7 +58,12 @@
 
     <!-- Begin page content -->
     <main role="main" class="container">
-        <p class="lead">이미지 등록 팝업입니다.</code></p>
+        <h2>이미지 등록</h2>
+        <form method="POST">
+            <input type="file"/>
+            <img id="previewImage" src="" alt="Picture">
+            <input type="text" name="croppResult" />
+        </form>
     </main>
 
     <footer class="footer">
