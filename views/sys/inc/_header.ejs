@@ -1,3 +1,12 @@
+<% if (locals.__isLogin == true) { %>
+<script type="text/javascript">
+    function _logout() {
+        if(confirm("로그아웃 하시겠습니까?") == true) {
+            location.href = "/com/logout";
+        }
+    }
+</script>
+<% } %>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand abs" href="/">Baton</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
@@ -34,7 +43,7 @@
                   <a class="nav-link" href="/com/mypage">마이페이지</a>
             </li>
             <li class="nav-item">
-                <span class="navbar-text"><%= locals.__user["USER_NM"] %></span>
+                <a class="nav-link" href="#" onclick="_logout()"><%= locals.__user["USER_NM"] %></a>
             </li>
             <% } %>
             <% if (locals.__isAdmin) { %>

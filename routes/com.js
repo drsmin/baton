@@ -79,6 +79,27 @@ router.post("/chkDupEmalAddr", function (req, res, next) {
     });
 });
 
+/** 로그아웃 */
+router.get("/logout", function (req, res, next) {
+    
+    let sess = req.session;
+    
+    if (sess) {
+        
+        req.session.destroy( function(err) {
+            
+            if(err) {
+                console.log(err);
+            } else {
+                res.redirect('/');
+            }
+        });
+    } else {
+        res.redirect('/');
+    }
+    
+});
+
 /** 기본 라우터 */
 commUtil.commRoute("com/", router);
 
