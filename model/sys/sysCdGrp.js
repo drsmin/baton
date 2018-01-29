@@ -1,5 +1,5 @@
 /** SYS_CD_GRP 테이블 관련 사용자 객체 */
-const datasource = require(global.__base + '/modules/datasource.js');
+const datasource = require(__base + '/modules/datasource.js');
 
 /** 코드 그룹 리스트 조회 */
 module.exports.selectList = function(cb) {

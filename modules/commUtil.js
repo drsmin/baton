@@ -1,4 +1,5 @@
 const sysCdDtl = require(global.__base + '/model/sys/sysCdDtl.js');
+const randomstring = require("randomstring");
 
 /** 기본 라우트 설정 */
 module.exports.commRoute = function(basePath, router) {
@@ -56,3 +57,22 @@ module.exports.chkAdmin = function (req, res, next) {
     req.flash("__msg", "관리자만 사용 가능합니다");
     res.redirect('/');
 };
+
+/** 랜덤 문자/숫자 */
+module.exports.getRandom = function(length, isNumber) {
+    
+    if(!length) {
+        length = 8;
+    }
+    
+    let rType = "alphanumeric";
+    
+    if (isNumber) {
+        rType = "numeric";
+    }
+    
+    return randomstring.generate({
+          length: length,
+          charset: rType
+        });
+}

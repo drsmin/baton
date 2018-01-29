@@ -2,6 +2,8 @@ const passport = require('passport');
 const express = require('express');
 const router = express.Router();
 const ds = require(__base + 'modules/datasource');
+const upload = require(__base + 'modules/upload.js');
+const commUtil = require(__base + "/modules/commUtil.js");
 
 router.get('/', function(req, res, next) {
     
@@ -124,13 +126,6 @@ router.ws('/ws', function(ws, req) {
     });
 });
 
-router.get('/login', function(req, res, next) {
-
-    res.render("loginTest");
-    
-    
-});
-
 router.post('/login.do', passport.authenticate('local', {
     
     failureRedirect: '/test/login'
@@ -139,11 +134,18 @@ router.post('/login.do', passport.authenticate('local', {
     res.redirect('/test/login');
 });
 
-router.get('/bootstrap', function(req, res, next) {
-
-    res.render("bootstrap");
+router.post("/upload", function(req, res, next) {
     
+    upload(req, res, "file", "temp").then(function (file) {
+        
+        console.log(file)
+        
+        res.render("upload");
+    });
     
 });
+
+/** 기본 라우터 */
+commUtil.commRoute("", router);
 
 module.exports = router;

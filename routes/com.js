@@ -1,8 +1,8 @@
 const express = require('express');
 const passport = require('passport');
-const commUtil = require(global.__base + "/modules/commUtil.js");
+const commUtil = require(__base + "/modules/commUtil.js");
 const router = express.Router();
-const comUser = require(global.__base + '/model/com/comUser.js');
+const comUser = require(__base + '/model/com/comUser.js');
 
 /** 로그인 */
 router.get('/login', function(req, res, next) {
