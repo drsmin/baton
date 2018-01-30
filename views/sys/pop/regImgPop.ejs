@@ -2,9 +2,19 @@
 <html>
     <head>
         <title>이미지 등록</title>
+        <style>
+            main.container {
+                margin : 15px;
+
+            }
+            
+            img {
+                max-width: 100%;
+            }
+        </style>
+        <link rel='stylesheet' href='/css/cropper.min.css' />
         <% include sys/inc/_jscss %>
-        <link rel='stylesheet' href='/css/stickyFooter.css' /> 
-        <link rel='stylesheet' href='/css/cropper.min.css' /> 
+        <!--<link rel='stylesheet' href='/css/stickyFooter.css' /> -->
         <script src="/js/cropper.min.js"></script>
         <script type="text/javascript">
         
@@ -95,8 +105,9 @@
                             zoomable: true,
                             rotatable: true,
                             scalable: true,
-                            responsive : true
-                        });
+                            responsive : true,
+                            autoCropArea : 1
+                        }).cropper('moveTo', 0, 0);
                       
                         $image.show();
                         $("#divRotate").show();
@@ -127,17 +138,17 @@
             <button type="button" class="btn btn-success" onclick="zoomOut()"><i class="fa fa-search-minus" aria-hidden="true"></i></i></button>
         </div>
         <div class="mr10"></div>
-        <img id="previewImage" src="" alt="Picture" style="display:none" width="100%" height="100%">
+        <img id="previewImage" src="" alt="Picture" style="display:none" />
 
     </main>
 
-    <footer class="footer">
+    <nav class="navbar fixed-bottom navbar-expand-sm navbar-light bg-light">
         <div class="container text-center">
             <div class="col-sm">
                 <button type="button" class="btn btn-primary" onclick="upload()">등록</button>
                 <button type="button" class="btn btn-secondary" onclick="window.self.close()">취소</button>
             </div>
         </div>
-    </footer>
+    </nav>
 </body>
 </html>
