@@ -1,13 +1,22 @@
-function openSendMsgPop() {
-    window.open("/com/pop/sendMsgPop",'sendMsgPop','width='+ 700 +',height='+ 500 +'');
+function openSendMsgPop(div) {
+    window.open("/com/pop/sendMsgPop/" + div,'sendMsgPop','width='+ 700 +',height='+ 500 +'');
 }
 
-function openRegImgPop() {
-    window.open("/sys/pop/regImgPop",'sendMsgPop','width='+ 700 +',height='+ 500 +'');
+function openRegImgPop(div, width, height) {
+    
+    if (!width) {
+        width = "1";
+    }
+    
+    if (!height) {
+        height = "1";
+    }
+    
+    window.open("/sys/pop/regImgPop/" + div + "/" + width + "/" + height,'sendMsgPop','width='+ 900 +',height='+ 700 +'');
 }
 
-function openRegMovPop() {
-    window.open("/sys/pop/regMovPop",'sendMsgPop','width='+ 700 +',height='+ 500 +'');
+function openRegMovPop(div) {
+    window.open("/sys/pop/regMovPop/" + div,'sendMsgPop','width='+ 700 +',height='+ 500 +'');
 }
 
 isloading = {

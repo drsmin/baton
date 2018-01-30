@@ -3,6 +3,7 @@ const commUtil = require(global.__base + "/modules/commUtil.js");
 const router   = express.Router();
 const sysCdGrp = require(global.__base + '/model/sys/sysCdGrp.js');
 const sysCdDtl = require(global.__base + '/model/sys/sysCdDtl.js');
+const upload = require(__base + 'modules/upload.js');
 
 /** 코드 관리 */
 router.get('/cdMngt', commUtil.chkAdmin, function(req, res, next) {
@@ -227,6 +228,26 @@ router.post('/cdGrpDtl', commUtil.chkAdmin, function(req, res, next) {
     }
 
 });
+
+/** 이미지 등록 팝업 */
+router.get('/pop/regImgPop/:div/:width/:height', function(req, res, next) {
+    
+    res.render("sys/pop/regImgPop", {"div" : req.params.div, "ratio" : req.params.width + "/" + req.params.height});
+    
+});
+
+/** 이미지 등록 팝업 */
+router.post('/pop/regImgPop', function(req, res, next) {
+
+    upload(req, res, "croppedImage", "img").then(function (file) {
+        
+        res.send(file["ATTC_FILE_SEQ"] + "");
+    });
+
+   
+    
+});
+
 
 /** 기본 라우터 */
 commUtil.commRoute("sys/", router);

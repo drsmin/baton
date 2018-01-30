@@ -7,38 +7,99 @@
         <link rel='stylesheet' href='/css/cropper.min.css' /> 
         <script src="/js/cropper.min.js"></script>
         <script type="text/javascript">
+        
+            var $image;
+            var $input;
+            
+            function rotateL() {
+                $image.cropper("rotate", -90);
+            }
+            
+            function rotateR() {
+                $image.cropper("rotate", 90);
+            }
+            
+            function zoomIn() {
+                $image.cropper("zoom", 0.1);
+            }
+            
+            function zoomOut() {
+                $image.cropper("zoom", -0.1);
+            }
+            
+            function upload() {
+                
+                if (!$("#inputFile")[0].files[0]) {
+                    alert("이미지를 먼저 선택 해 주세요");
+                    return;
+                }
+                
+                if(!$image.cropper('getCroppedCanvas')) {
+                    alert("정상적인 이미지가 아닙니다");
+                    return;
+                }
+                
+                var fileName = $("#inputFile")[0].files[0].name;
+                
+                $image.cropper('getCroppedCanvas').toBlob(function (blob) {
+                    var formData = new FormData();
+                  
+                    formData.append("croppedImage", blob, fileName);
+                
+                    $.ajax('/sys/pop/regImgPop', {
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            console.log('Upload success ' + data);
+                            alert("등록 되었습니다");
+                            opener._regImgPopCb_<%= div %>(data);
+                            window.self.close();
+                        },
+                        error: function () {
+                            console.log('Upload error');
+                            alert("등록 중 오류가 발생하였습니다");
+                            return;
+                        }
+                    });
+                });
+                
+            }
+            
             $(function() {
                 $("button.close").click(function () {
                     window.self.close();
                 });
                 
-                  var $image = $("#previewImage");
-                  var $input = $("[name='croppResult']");
+                $image = $("#previewImage");
+                $input = $("#cropResult");
                 
-                  $("input:file").change(function() {
+                $("input:file").change(function() {
                     var oFReader = new FileReader();
                 
                     oFReader.readAsDataURL(this.files[0]);
                 
                     oFReader.onload = function (oFREvent) {
                 
-                      // Destroy the old cropper instance
-                      $image.cropper('destroy');
+                        // Destroy the old cropper instance
+                        $image.cropper('destroy');
                 
-                      // Replace url
-                      $image.attr('src', this.result);
+                        // Replace url
+                        $image.attr('src', this.result);
                 
-                      // Start cropper
-                      $image.cropper({
-                        aspectRatio: 1,
-                        movable: false,
-                        zoomable: false,
-                        rotatable: false,
-                        scalable: false,
-                        crop: function(e) {
-                          $input.val(e.x + ", " + e.y +"," + e.width + "," + e.height);
-                        }
-                      });
+                        // Start cropper
+                        $image.cropper({
+                            aspectRatio: <%= ratio %>,
+                            movable: true,
+                            zoomable: true,
+                            rotatable: true,
+                            scalable: true,
+                            responsive : true
+                        });
+                      
+                        $image.show();
+                        $("#divRotate").show();
                     };
                   });
             });
@@ -58,19 +119,23 @@
 
     <!-- Begin page content -->
     <main role="main" class="container">
-        <h2>이미지 등록</h2>
-        <form method="POST">
-            <input type="file"/>
-            <img id="previewImage" src="" alt="Picture">
-            <input type="text" name="croppResult" />
-        </form>
+        <input type="file" id="inputFile" />
+        <div class="text-center" style="display:none" id="divRotate">
+            <button type="button" class="btn btn-success" onclick="rotateL()"><i class="fa fa-undo" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-success" onclick="rotateR()"><i class="fa fa-repeat" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-success" onclick="zoomIn()"><i class="fa fa-search-plus" aria-hidden="true"></i></i></button>
+            <button type="button" class="btn btn-success" onclick="zoomOut()"><i class="fa fa-search-minus" aria-hidden="true"></i></i></button>
+        </div>
+        <div class="mr10"></div>
+        <img id="previewImage" src="" alt="Picture" style="display:none" width="100%" height="100%">
+
     </main>
 
     <footer class="footer">
         <div class="container text-center">
             <div class="col-sm">
-                <button type="button" class="btn btn-primary">등록</button>
-                <button type="button" class="btn btn-secondary">취소</button>
+                <button type="button" class="btn btn-primary" onclick="upload()">등록</button>
+                <button type="button" class="btn btn-secondary" onclick="window.self.close()">취소</button>
             </div>
         </div>
     </footer>

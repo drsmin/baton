@@ -3,6 +3,8 @@ const path = require('path');
 const env = require(__base + 'config/env.js');
 const commUtil = require(__base + 'modules/commUtil.js');
 const sysAttcFile = require(__base + '/model/sys/sysAttcFile.js');
+const fs = require("fs");
+const mkdirp = require('mkdirp');
 
 module.exports = function (req, res, paramNm, pathNm) {
     var storage = multer.diskStorage({
@@ -14,6 +16,10 @@ module.exports = function (req, res, paramNm, pathNm) {
             
             if (pathNm) {
                 uploadPath += "/" + pathNm;
+            }
+            
+            if (fs.existsSync(uploadPath) == false) {
+                mkdirp.sync(uploadPath);
             }
             
             cb(null, uploadPath);
