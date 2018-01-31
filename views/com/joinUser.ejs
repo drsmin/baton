@@ -3,6 +3,7 @@
     <head>
         <title>회원가입</title>
         <% include sys/inc/_jscss %>
+        <script src="/js/comm.js"></script>
         <script type="text/javascript">
             
             let dupEmalAddr = true;
@@ -12,6 +13,10 @@
                 $("#EMAL_ADDR").blur(function () {
                     
                     let $this = $(this);
+                    
+                    if ($this.val() == "") {
+                        return;
+                    }
                     
                     _sendAjax("/com/chkDupEmalAddr", {"EMAL_ADDR" : $this.val()}, function (data) {
                         dupEmalAddr = data;
@@ -42,7 +47,11 @@
                     return false;
                 }
             }
-        
+            
+            function _regImgPopCb_prfl(attcFileSeq) {
+                $("#PRFL_FILE_SEQ").val(attcFileSeq);
+                $("#imgPRFL_FILE_SEQ").attr("src", "/imgView/" + attcFileSeq);
+            }
         </script>
     </head>
 <body>
@@ -63,6 +72,13 @@
                 <div class="form-group">
                     <label for="">비밀번호</label>
                     <input type="password" class="form-control" id="USER_PW" name="USER_PW" placeholder="비밀번호" required />
+                </div>
+                <div class="form-group">
+                    <label for="imgPRFL_FILE_SEQ">프로필 사진</label>
+                    <br/>
+                    <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" id="imgPRFL_FILE_SEQ" width="70" height="70">
+                    <input type="hidden" name="PRFL_FILE_SEQ" id="PRFL_FILE_SEQ" />
+                    <button type="button" class="btn btn-info" onclick="openRegImgPop('prfl', '1', '1')">등록</button>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">비밀번호 확인</label>
