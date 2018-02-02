@@ -1,6 +1,5 @@
 const multer = require('multer');
 const path = require('path');
-const env = require(__base + 'config/env.js');
 const commUtil = require(__base + 'modules/commUtil.js');
 const sysAttcFile = require(__base + '/model/sys/sysAttcFile.js');
 const fs = require("fs");
@@ -12,7 +11,7 @@ module.exports = function (req, res, paramNm, pathNm) {
         // 서버에 저장할 폴더
         destination: function (req, file, cb) {
             
-            let uploadPath =  env.uploadBasePath;
+            let uploadPath =  __env.uploadBasePath;
             
             if (pathNm) {
                 uploadPath += "/" + pathNm;

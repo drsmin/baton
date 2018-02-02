@@ -22,45 +22,18 @@
             
             <p><h2>원하는 카테고리에서 파트너를 찾아보세요</h2></p>
 
-
-
-
             <div class="container marketing">
                 <div class="row">
-                    <div class="col-lg-3">
-                        <h3><a class="nav-link" href="/sel/selMst?cat=카테고리명">카테고리명</a></h3>
-                        <img class="rounded-squre" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140" />
+                <% if (locals.catCd) {
+                    for (let key in locals.catCd) {
+                        let item = locals.catCd[key];
+                        %>
+                    <div class="col-lg-3" style="margin-top:20px;">
+                        <h3><a class="nav-link" href="/sel/selMst?cat=<%= item["CD_VAL"] %>"><%= item["CD_NM"] %></a></h3>
+                        <img class="rounded-squre" src="/img/cat/<%= item["CD_VAL"] %>.png" onerror="this.src='/img/cat/99.png'" alt="Generic placeholder image" width="140" height="140" />
                     </div><!-- /.col-lg-3 -->
-                    <div class="col-lg-3">
-                        <h3><a class="nav-link" href="/sel/selMst?cat=카테고리명">카테고리명</a></h3>
-                        <img class="rounded-squre" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140" />
-                    </div><!-- /.col-lg-3 -->
-                    <div class="col-lg-3">
-                        <h3><a class="nav-link" href="/sel/selMst?cat=카테고리명">카테고리명</a></h3>
-                        <img class="rounded-squre" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140" />
-                    </div><!-- /.col-lg-3 -->
-                    <div class="col-lg-3">
-                        <h3><a class="nav-link" href="/sel/selMst?cat=카테고리명">카테고리명</a></h3>
-                        <img class="rounded-squre" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140" />
-                    </div><!-- /.col-lg-3 -->
-                </div><!-- /.row -->
-                <div class="row">
-                    <div class="col-lg-3">
-                        <h3><a class="nav-link" href="/sel/selMst?cat=카테고리명">카테고리명</a></h3>
-                        <img class="rounded-squre" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140" />
-                    </div><!-- /.col-lg-3 -->
-                    <div class="col-lg-3">
-                        <h3><a class="nav-link" href="/sel/selMst?cat=카테고리명">카테고리명</a></h3>
-                        <img class="rounded-squre" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140" />
-                    </div><!-- /.col-lg-3 -->
-                    <div class="col-lg-3">
-                        <h3><a class="nav-link" href="/sel/selMst?cat=카테고리명">카테고리명</a></h3>
-                        <img class="rounded-squre" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140" />
-                    </div><!-- /.col-lg-3 -->
-                    <div class="col-lg-3">
-                        <h3><a class="nav-link" href="/sel/selMst?cat=카테고리명">카테고리명</a></h3>
-                        <img class="rounded-squre" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140" />
-                    </div><!-- /.col-lg-3 -->
+                <% }
+                } %>
                 </div><!-- /.row -->
                 <div class="mr30"></div>
             </div>

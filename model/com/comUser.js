@@ -36,6 +36,7 @@ module.exports.insert = function(data, cb) {
     dbData.push(data["NATI_CD"]);
     dbData.push(data["LNGG_CD"]);
     dbData.push(data["LIVE_AREA"]);
+    dbData.push(data["PRFL_FILE_SEQ"]);
     
     if (data["BITH"]) {
         dbData.push(data["BITH"].replace(/\-/gi, ""));

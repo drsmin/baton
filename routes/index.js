@@ -2,10 +2,24 @@ const express = require('express');
 const fs = require('fs');
 const router = express.Router();
 const sysAttcFile = require(__base + '/model/sys/sysAttcFile.js');
+const commUtil = require(__base + "/modules/commUtil.js");
 
 /** 메인 화면 */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Baton 2.0' });
+    
+    let promise1 = commUtil.getCdList("CAT_CD").then(function (results) {
+       
+        res.locals.catCd = results;
+       
+    });
+    
+    Promise.all([promise1]).then(function () {
+        
+        res.render('index', { title: 'Baton 2.0' });
+	   
+    });
+    
+
 });
 
 /** 파일 보기 */

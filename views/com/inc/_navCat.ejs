@@ -3,30 +3,18 @@
     <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample10">
     
     <ul class="navbar-nav">
+        
+        <% if (locals.catCd) {
+            for (let key in locals.catCd) {
+                let item = locals.catCd[key];
+                %>
+            
+            
         <li class="nav-item">
-            <a class="nav-link" href="/sel/selMst?cat=회화">회화</a>
+            <a class="nav-link" href="/sel/selMst?cat=<%= item["CD_VAL"] %>"><%= item["CD_NM"] %></a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/sel/selMst?cat=번역/문서">번역/문서</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/sel/selMst?cat=모델/성우">모델/성우</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/sel/selMst?cat=마케팅">마케팅</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/sel/selMst?cat=문화/취미">문화/취미</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/sel/selMst?cat=예술">예술</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/sel/selMst?cat=비즈니스">비즈니스</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/sel/selMst?cat=기타">기타</a>
-        </li>
+        <% }
+        } %>
       </ul>
     </div>
   </nav>

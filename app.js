@@ -3,7 +3,8 @@ process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim()
 /** APP 의 베이스 경로 */
 global.__base = __dirname + '/';
 
-const commUtil = require('./modules/commUtil.js');
+const env = require(__base + 'config/env.js');
+//const commUtil = require('./modules/commUtil.js');
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -18,6 +19,8 @@ const passportLocal = require('./modules/passport.js'); // local전략
 const app = express();
 
 const expressWs = require('express-ws')(app);
+
+global.__env = env;
 
 /** 기본 view 디렉토리 */
 app.set('views', path.join(__dirname, 'views'));
