@@ -4,7 +4,21 @@ const datasource = require(global.__base + '/modules/datasource.js');
 /** 로그인 */
 module.exports.selectLogin = function(userId, userPw, cb) {
     
-    datasource.query("SELECT * FROM COM_USER WHERE USER_ID = ? AND USER_PW = PASSWORD(?)", [userId, userPw], function(err, results, fields) {
+    datasource.query("SELECT * FROM COM_USER WHERE USER_ID = ? AND USER_PW = PASSWORD(?) AND SNS_DIV_CD IS NULL", [userId, userPw], function(err, results, fields) {
+        
+        if(err) {
+            cb("사용자 정보 조회 중 오류 발생");
+        }
+        
+        cb(null, results, fields);
+    });
+  
+};
+
+/** Facebook 로그인 */
+module.exports.selectLoginFB = function(userId, cb) {
+    
+    datasource.query("SELECT * FROM COM_USER WHERE USER_ID = ? AND SNS_DIV_CD = 'FB'", [userId], function(err, results, fields) {
         
         if(err) {
             cb("사용자 정보 조회 중 오류 발생");

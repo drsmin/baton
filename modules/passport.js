@@ -1,6 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const comUser = require(global.__base + '/model/com/comUser.js');
+const FacebookStrategy = require('passport-facebook').Strategy;
 
 /** pass포트 로컬 전략 모듈 */
 module.exports = function() {
@@ -14,7 +15,7 @@ module.exports = function() {
         done(null, user); // 여기의 user가 req.user가 됨
     });
 
-    /** 로컬 전 */
+    /** 로컬 전략 */
     passport.use(new LocalStrategy({ // local 전략을 세움
         usernameField: 'userId',
         passwordField: 'userPw',
@@ -30,4 +31,22 @@ module.exports = function() {
       
     });
     }));
+    
+    /** Facebook 전략 */
+    passport.use(new FacebookStrategy({
+        clientID: __env["facebookAppId"],
+        clientSecret: __env["facebookSecretCode"],
+        callbackURL: '/com/login/facebook/callback',
+        session: true, // 세션에 저장 여부
+        passReqToCallback: true }
+    , function(req, accessTken, refreshToken, profile, done) {
+        comUser.selectLoginFB(profile.id, function(err, results) {
+            
+            if (err) return done(err, false);; //서버 에러 처리
+            if (!results || results.length === 0) return done(null, false);
+            return done(null, results[0]); // 검증 성공
+      
+        });
+        }
+    ));
 };

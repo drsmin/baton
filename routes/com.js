@@ -100,6 +100,19 @@ router.get("/logout", function (req, res, next) {
     
 });
 
+/** 페이스북 로그인 */
+router.get('/login/facebook', passport.authenticate('facebook', {
+    authType: 'rerequest', 
+    scope: ['public_profile', 'email']
+}));
+
+/** 페이스북 로그인 callback */
+router.get('/login/facebook/callback', passport.authenticate('facebook', {
+    successRedirect : '/',
+    failureRedirect: '/com/login',
+    failureFlash : 'Facebook 로그인을 실패 했습니다.' })
+);
+
 /** 기본 라우터 */
 commUtil.commRoute("com/", router);
 
