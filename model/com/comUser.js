@@ -4,7 +4,7 @@ const datasource = require(global.__base + '/modules/datasource.js');
 /** 로그인 */
 module.exports.selectLogin = function(userId, userPw, cb) {
     
-    datasource.query("SELECT * FROM COM_USER WHERE USER_ID = ? AND USER_PW = PASSWORD(?) AND SNS_DIV_CD IS NULL", [userId, userPw], function(err, results, fields) {
+    datasource.query("SELECT * FROM COM_USER WHERE USER_ID = ? AND USER_PW = PASSWORD(?) AND SNS_DIV_CD = '10'", [userId, userPw], function(err, results, fields) {
         
         if(err) {
             cb("사용자 정보 조회 중 오류 발생");
@@ -29,6 +29,20 @@ module.exports.selectLoginFB = function(userId, cb) {
   
 };
 
+/** Google 로그인 */
+module.exports.selectLoginGG = function(userId, cb) {
+    
+    datasource.query("SELECT * FROM COM_USER WHERE USER_ID = ? AND SNS_DIV_CD = 'GG'", [userId], function(err, results, fields) {
+        
+        if(err) {
+            cb("사용자 정보 조회 중 오류 발생");
+        }
+        
+        cb(null, results, fields);
+    });
+  
+};
+
 /** 회원 가입 처리 */
 module.exports.insert = function(data, cb) {
     
@@ -43,7 +57,7 @@ module.exports.insert = function(data, cb) {
     dbData.push(data["USER_ID"]);
     dbData.push(data["USER_PW"]);
     dbData.push("10"); //USER_ROLE_CD
-    dbData.push("10"); //SNS_DIV_CD
+    dbData.push(data["SNS_DIV_CD"]);
     dbData.push(data["EMAL_ADDR"]);
     dbData.push(data["USER_NM"]);
     dbData.push(data["CPHN_NO"]);

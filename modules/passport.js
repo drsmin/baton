@@ -2,6 +2,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const comUser = require(global.__base + '/model/com/comUser.js');
 const FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy
 
 /** pass포트 로컬 전략 모듈 */
 module.exports = function() {
@@ -42,9 +43,67 @@ module.exports = function() {
     , function(req, accessTken, refreshToken, profile, done) {
         comUser.selectLoginFB(profile.id, function(err, results) {
             
-            if (err) return done(err, false);; //서버 에러 처리
-            if (!results || results.length === 0) return done(null, false);
-            return done(null, results[0]); // 검증 성공
+            if (err) return done(err, false); //서버 에러 처리
+            if (!results || results.length === 0) {
+                
+                console.log(profile);
+                
+                //없는 경우 신규로 등록
+                let data = {};
+                data["USER_ID"] = profile.id;
+                data["USER_NM"] = profile.displayName;
+                data["SNS_DIV_CD"] = "FB";
+                
+                comUser.insert(data, function (err, results) {
+                    
+                    if (err) {
+                        return done("회원 등록 중 오류", null);
+                    }
+                    
+                    return done(null, data); // 검증 성공
+                });
+            } else {
+                return done(null, results[0]); // 검증 성공
+            }
+      
+        });
+        }
+    ));
+    
+    /** google 전략 */
+    passport.use(new GoogleStrategy({
+            clientID: __env["googleAppId"],
+            clientSecret: __env["googleSecretCode"],
+            callbackURL: '/com/login/google/callback',
+            session: true, // 세션에 저장 여부
+            passReqToCallback: true }
+        , function(req, accessTken, refreshToken, profile, done) {
+        comUser.selectLoginGG(profile.id, function(err, results) {
+            
+            if (err) return done(err, false); //서버 에러 처리
+            if (!results || results.length === 0) {
+                
+                console.log(profile);
+                
+                //없는 경우 신규로 등록
+                let data = {};
+                data["USER_ID"] = profile.id;
+                data["USER_NM"] = profile.displayName;
+                data["SNS_DIV_CD"] = "GG";
+                //TODO 추가 정보 
+                
+                comUser.insert(data, function (err, results) {
+                    
+                    if (err) {
+                        return done("회원 등록 중 오류", null);
+                    }
+                    
+                    return done(null, data); // 검증 성공
+                });
+                
+            } else {
+                return done(null, results[0]); // 검증 성공
+            }
       
         });
         }

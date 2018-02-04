@@ -57,6 +57,7 @@ router.get('/joinUser', function(req, res, next) {
 router.post("/joinUser", function (req, res, next) {
     
     req.body["USER_ID"] = req.body.EMAL_ADDR;
+    req.body["SNS_DIV_CD"] = "10";
     
     comUser.insert(req.body, function(err, results) {
         
@@ -111,6 +112,19 @@ router.get('/login/facebook/callback', passport.authenticate('facebook', {
     successRedirect : '/',
     failureRedirect: '/com/login',
     failureFlash : 'Facebook 로그인을 실패 했습니다.' })
+);
+
+/** google 로그인 */
+router.get('/login/google', passport.authenticate('google', {
+    authType: 'rerequest', 
+    scope: ['profile']
+}));
+
+/** 페이스북 로그인 callback */
+router.get('/login/google/callback', passport.authenticate('google', {
+    successRedirect : '/',
+    failureRedirect: '/com/login',
+    failureFlash : 'Google 로그인을 실패 했습니다.' })
 );
 
 /** 기본 라우터 */
