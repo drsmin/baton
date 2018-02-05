@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>판매자 등록</title>
+        <title>판매 등록</title>
         <% include sys/inc/_jscss %>
         <script type="text/javascript">
         
@@ -32,34 +32,48 @@
                 </div><!-- row -->
             </nav>
             <div class="mr30"></div>
-            <form action="/sel/selReg2">
+            <form action="/sel/selReg2" method="post">
+                <% 
+                    let svcSeq = typeof(SVC_SEQ) == 'undefined' ? '' : SVC_SEQ;
+                    let svcTitl = typeof(SVC_TITL) == 'undefined' ? '' : SVC_TITL;
+                    let catCd = typeof(CAT_CD) == 'undefined' ? '' : CAT_CD;
+                    let svcType = typeof(SVC_TYPE) == 'undefined' ? '' : SVC_TYPE;
+                %>
+                <input type="hidden" id="SVC_SEQ" name="SVC_SEQ" value="<%= svcSeq %>">
                 <div class="form-group row">
-                    <label for="svcTitle" class="col-sm-2 col-form-label">서비스 제목</label>
+                    <label for="SVC_TITL" class="col-sm-2 col-form-label">서비스 제목</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="svcTitle" placeholder="서비스 제목">
+                        <input type="text" class="form-control" id="SVC_TITL" name="SVC_TITL" placeholder="서비스 제목" value="<%= svcTitl %>">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="catUp" class="col-sm-2 col-form-label">카테고리</label>
+                    <label class="col-sm-2 col-form-label">카테고리</label>
                     <div class="col-sm-5">
-                        <label for="catUp">상위 카테고리</label>
-                        <select class="form-control" id="catUp" name="catUp">
-                            <option>상위1</option>
-                            <option>상위2</option>
+                        <label for="CAT_CD">카테고리</label>
+                        <select class="form-control" id="CAT_CD" name="CAT_CD">
+                            <% if (locals.catCd) {
+                                for (let key in locals.catCd) {
+                                    let item = locals.catCd[key];
+                                    let selected = catCd == item["CD_VAL"] ? "selected" : "";
+                                    %>
+                            <option value="<%= item["CD_VAL"] %>" <%= selected %>><%= item["CD_NM"] %></option>
+                            <% }
+                            } %>
+
                         </select>
                     </div>
                     <div class="col-sm-5">
-                        <label for="cat">하위 카테고리</label>
+                        <!--<label for="cat">하위 카테고리</label>
                         <select class="form-control" id="cat" name="cat">
                             <option>하위1</option>
                             <option>하위2</option>
-                        </select>
+                        </select>-->
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="type" class="col-sm-2 col-form-label">서비스타입</label>
+                    <label for="SVC_TYPE" class="col-sm-2 col-form-label">서비스타입</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="svcType" placeholder="서비스 타입">
+                        <input type="text" class="form-control" id="SVC_TYPE" name="SVC_TYPE" placeholder="서비스 타입" value="<%= svcType %>" />
                     </div>
                 </div>
                 <div class="form-group row">

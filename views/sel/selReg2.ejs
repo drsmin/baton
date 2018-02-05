@@ -10,14 +10,23 @@
                 $("#addProd").click(function () {
                     let tbody = $("#prodPrice > tbody");
                     
-                    let rows = tbody.find("tr").length;
+                    let _tr = tbody.find("tr");
                     
-                    let tr = '<tr><th scope="row">' + (rows + 1) + '</th><td><input type="text" class="form-control" value="" /></td><td><input type="number" class="form-control" value="" /></td><td><input type="text" class="form-control" value="" /></td></tr>';
+                    let rows = _tr.length;
                     
-                    tbody.append($(tr));
+                    let tr = $(_tr.get(0).outerHTML);
+                    
+                    tr.find("input").val("");
+                    tr.children().first().html(rows + 1)
+                    
+                    tbody.append(tr);
                 });
                 
             });
+            
+            function _onsubmit() {
+                
+            }
         </script>
     </head>
 <body>
@@ -45,7 +54,8 @@
                 </div><!-- row -->
             </nav>
             <div class="mr30"></div>
-            <form action="/sel/selReg3">
+            <form action="/sel/selReg3" method="post" onsubmit="return _onsubmit()">
+                <input type="hidden" id="SVC_SEQ" name="SVC_SEQ" value="<%= SVC_SEQ%>" />
                 <div class="form-group row">
                     <div class="col-sm-12 text-right">
                         <button type="button" class="btn btn-info" id="addProd">상품추가</button>
@@ -61,30 +71,32 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <% if (typeof(list) != "undefined" && list.length > 0) {
+                            
+                            for (let idx = 0, _max = list.length ; idx < _max ; idx++) {
+                                let item = list[idx];
+                            %>
                         <tr>
-                            <th scope="row">1</th>
-                            <td><input type="text" class="form-control" value="일당" /></td>
-                            <td><input type="number" class="form-control" value="250000" /></td>
-                            <td><input type="text" class="form-control" value="하루 풀타임 일당입니다." /></td>
+                            <th scope="row"><%= (idx + 1) %><input type="hidden" name="GODS_SEQ" value="<%= item["GODS_SEQ"] %>"/></th>
+                            <td><input type="text" class="form-control" name="GODS_NM" value="<%= item["GODS_NM"] %>" required /></td>
+                            <td><input type="number" class="form-control" name="GODS_UPRC" value="<%= item["GODS_UPRC"] %>" required /></td>
+                            <td><input type="text" class="form-control" name="GODS_DTL" value="<%= item["GODS_DTL"] %>" /></td>
                         </tr>
+                        <% }
+                        } else { %>
                         <tr>
-                            <th scope="row">2</th>
-                            <td><input type="text" class="form-control" value="시급" /></td>
-                            <td><input type="number" class="form-control" value="50000" /></td>
-                            <td><input type="text" class="form-control" value="한시간 인건비 입니다." /></td>
+                            <th scope="row">1<input type="hidden" name="GODS_SEQ" value="" /></th>
+                            <td><input type="text" class="form-control" name="GODS_NM" value="" required /></td>
+                            <td><input type="number" class="form-control" name="GODS_UPRC" value="" required /></td>
+                            <td><input type="text" class="form-control" name="GODS_DTL" value="" /></td>
                         </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td><input type="text" class="form-control" value="기술이전" /></td>
-                            <td><input type="number" class="form-control" value="500000" /></td>
-                            <td><input type="text" class="form-control" value="기술 이전 비용입니다." /></td>
-                        </tr>
+                        <% } %>
                     </tbody>
                 </table>
 
                 <div class="form-group row">
                     <div class="col-sm-6 text-left">
-                        <button type="button" class="btn btn-secondary" onclick="history.back()">이전</button>
+                        <button type="button" class="btn btn-secondary" onclick="location.href='/sel/selReg1/<%= SVC_SEQ%>'">이전</button>
                     </div>
                     <div class="col-sm-6 text-right">
                         <button type="submit" class="btn btn-primary">다음단계</button>

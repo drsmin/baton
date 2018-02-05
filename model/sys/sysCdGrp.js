@@ -8,9 +8,9 @@ module.exports.selectList = function(cb) {
         
         if(err) {
             cb("코드 그룹 정보 조회 중 오류 발생");
+        } else {
+            cb(null, results, fields);
         }
-        
-        cb(null, results, fields);
     });
 };
 
@@ -21,9 +21,9 @@ module.exports.select = function(cdGrp, cb) {
         
         if(err) {
             cb("코드 그룹 정보 조회 중 오류 발생");
+        } else {
+            cb(null, results, fields);            
         }
-        
-        cb(null, results, fields);
     });
 };
 
@@ -57,8 +57,8 @@ module.exports.update = function(data, where, cb) {
         
         if(err) {
             cb("코드 그룹 수정 중 오류 발생");
+        } else {
+            cb(null, results, fields);            
         }
-        
-        cb(null, results, fields);
     });
 };

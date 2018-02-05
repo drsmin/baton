@@ -1,5 +1,6 @@
 const mysql    = require('mysql');
 const dbconfig = require(__base + 'config/database');
+const commUtil = require(__base + "/modules/commUtil.js");
 let conn;
 
 /** 데이터베이스 설정 */
@@ -52,7 +53,7 @@ module.exports.insert = function (tableNm, params, callback) {
     var param;
     var pIsArr = false;
     
-    if (params.constructor === Array) {
+    if (commUtil.isArray(params)) {
         param = params[0];
         pIsArr = true;
     } else {
@@ -78,6 +79,8 @@ module.exports.insert = function (tableNm, params, callback) {
         idx++;
     }
     
+    sql += ", REG_DTTM, UPT_DTTM";
+    
     sql += ") VALUES ";
     
     sql += "(";
@@ -94,6 +97,8 @@ module.exports.insert = function (tableNm, params, callback) {
         
         idx++;
     }
+    
+    sql += ", NOW(), NOW()";
     
     sql += ")";
     
@@ -115,6 +120,8 @@ module.exports.insert = function (tableNm, params, callback) {
                 
                 idx++;
             }
+            
+            sql += ", NOW(), NOW()";
             
             sql += ")";
         }
@@ -190,6 +197,8 @@ module.exports.update = function (tableNm, params, where, callback) {
         
         idx++;
     }
+    
+    sql += " AND UPT_DTTM = NOW() ";
     
     sql += " WHERE ";
     
@@ -275,6 +284,7 @@ module.exports.delete = function (tableNm, where, callback) {
         
         idx++;
     }
+
     
     this.init();
     

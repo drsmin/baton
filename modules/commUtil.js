@@ -36,7 +36,7 @@ module.exports.getCdList = function(cdGrp, callback) {
     });
     
     return promise;
-}
+};
 
 /** 공통 코드 단건 조회 defferd 패턴 */
 module.exports.getCd = function(cdGrp, cdVal, callback) {
@@ -59,7 +59,7 @@ module.exports.getCd = function(cdGrp, cdVal, callback) {
     });
     
     return promise;
-}
+};
 
 /** 로그인 여부 확인 middleware */
 module.exports.chkLogin = function (req, res, next) {
@@ -98,4 +98,20 @@ module.exports.getRandom = function(length, isNumber) {
           length: length,
           charset: rType
         });
-}
+};
+
+/** 랜덤 문자/숫자 */
+module.exports.setUserInfo = function(data, user) {
+    
+    if (data) {
+        data["REG_USER_ID"] = user["USER_ID"];
+        data["UPT_USER_ID"] = user["USER_ID"];
+    }
+};
+
+/** Array 여부 */
+module.exports.isArray = function isArray (ar) {
+  return ar instanceof Array
+      || Array.isArray(ar)
+      || (ar && ar !== Object.prototype && isArray(ar.__proto__));
+};

@@ -9,11 +9,13 @@ router.get('/login', function(req, res, next) {
     
     if (true == res.locals.__isLogin) {
         res.redirect("/");
+    } else {
+    
+        let message = req.flash("error");
+        
+        res.render('com/login', {"_message" : message[0]});
     }
-    
-    let message = req.flash("error");
-    
-    res.render('com/login', {"_message" : message[0]});
+
 });
 
 /** 로그인 Local 전략 */
@@ -103,8 +105,7 @@ router.get("/logout", function (req, res, next) {
 
 /** 페이스북 로그인 */
 router.get('/login/facebook', passport.authenticate('facebook', {
-    authType: 'rerequest', 
-    scope: ['public_profile', 'email']
+scope: ['public_profile', 'email']
 }));
 
 /** 페이스북 로그인 callback */
@@ -129,5 +130,16 @@ router.get('/login/google/callback', passport.authenticate('google', {
 
 /** 기본 라우터 */
 commUtil.commRoute("com/", router);
+
+/** 판매자 등록 */
+router.get('/joinSeller', function(req, res, next) {
+    
+    if (true == res.locals.__isLogin) {
+        res.redirect("/sel/selReg1");
+    } else {
+        res.render('com/joinSeller');
+    }
+
+});
 
 module.exports = router;

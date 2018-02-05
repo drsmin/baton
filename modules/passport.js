@@ -90,15 +90,17 @@ module.exports = function() {
                 data["USER_ID"] = profile.id;
                 data["USER_NM"] = profile.displayName;
                 data["SNS_DIV_CD"] = "GG";
-                //TODO 추가 정보 
+                data["LIVE_AREA"] = profile.placeLived[0];
+                data["LNGG_CD"] = profile.language;
+                
                 
                 comUser.insert(data, function (err, results) {
                     
                     if (err) {
                         return done("회원 등록 중 오류", null);
+                    } else {
+                        return done(null, data); // 검증 성공                        
                     }
-                    
-                    return done(null, data); // 검증 성공
                 });
                 
             } else {

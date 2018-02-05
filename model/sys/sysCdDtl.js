@@ -21,9 +21,10 @@ module.exports.select = function(cdGrp, cdVal, cb) {
         
         if(err) {
             cb("코드 그룹 정보 조회 중 오류 발생");
+        } else {
+            cb(null, results, fields);
         }
-        
-        cb(null, results, fields);
+
     });
 };
 
@@ -41,9 +42,10 @@ module.exports.insert = function(data, cb) {
         
         if(err) {
             cb("코드 상세 등록 중 오류 발생");
+        } else {
+            cb(null, results, fields);
         }
-        
-        cb(null, results, fields);
+
     });
 };
 
@@ -67,15 +69,15 @@ module.exports.update = function(data, where, cb) {
     });
 };
 
-/** 코드 상세 수정 */
+/** 코드 상세 삭제 */
 module.exports.delete = function(where, cb) {
     
     datasource.delete("SYS_CD_DTL", where, function(err, results, fields) {
         
         if(err) {
             cb("코드 상세 수정 중 오류 발생");
+        } else {
+            cb(null, results, fields);            
         }
-        
-        cb(null, results, fields);
     });
 };

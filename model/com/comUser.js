@@ -8,9 +8,9 @@ module.exports.selectLogin = function(userId, userPw, cb) {
         
         if(err) {
             cb("사용자 정보 조회 중 오류 발생");
+        } else {
+            cb(null, results, fields);
         }
-        
-        cb(null, results, fields);
     });
   
 };
@@ -22,9 +22,9 @@ module.exports.selectLoginFB = function(userId, cb) {
         
         if(err) {
             cb("사용자 정보 조회 중 오류 발생");
+        } else {
+            cb(null, results, fields);            
         }
-        
-        cb(null, results, fields);
     });
   
 };
@@ -80,10 +80,11 @@ module.exports.insert = function(data, cb) {
         
         if(err) {
             cb(err);
-            return;
+        } else {
+            cb(null, results, fields);            
         }
         
-        cb(null, results, fields);
+
     });
   
 };
@@ -96,22 +97,23 @@ module.exports.chkDupEmalAddr = function(emalAddr) {
         datasource.query("SELECT COUNT(1) AS CNT FROM COM_USER WHERE EMAL_ADDR = ?", [emalAddr], function(err, results, fields) {
             
             if(err) {
-                if (err) {
-                    reject("사용자 정보 조회 중 오류 발생");
-                }
-            }
-            
-            let chkRet = false;
-            
-            if (results.length == 0) {
-                chkRet = true;
+                reject("사용자 정보 조회 중 오류 발생");
+                
             } else {
-                if (results[0]["CNT"] <= 0) {
+            
+                let chkRet = false;
+                
+                if (results.length == 0) {
                     chkRet = true;
+                } else {
+                    if (results[0]["CNT"] <= 0) {
+                        chkRet = true;
+                    }
                 }
+            
+                resolve(chkRet);
             }
-        
-            resolve(chkRet);
+
         });
     });
     
