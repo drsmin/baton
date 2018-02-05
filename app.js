@@ -104,7 +104,11 @@ app.use(function(req, res, next) {
 /** error handler */
 app.use(function(err, req, res, next) {
 
-    res.locals.message = err.message || '오류가 발생하였습니다';
+    if (err.userMsg) {
+        res.locals.message = err.userMsg;
+    } else {
+        res.locals.message = err.message || '오류가 발생하였습니다';
+    }
     
     if (err && err.code == "ER_DUP_ENTRY") {
         res.locals.message = "데이터 등록 중 중복 오류가 발생 하였습니다.";
@@ -113,7 +117,7 @@ app.use(function(err, req, res, next) {
     //개발 환경일 때만 상세 trace 로그 표시
     res.locals.error = process.env.NODE_ENV == 'dev' ? err : {};
   
-    console.log(JSON.stringify(err));
+    console.log(err);
     console.log("ERROR Handler Message[%s]", err.message);
 
     res.status(err.status || 500);

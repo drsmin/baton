@@ -1,5 +1,6 @@
 /** SYS_ATTC_FILE 테이블 관련 사용자 객체 */
 const datasource = require(__base + '/modules/datasource.js');
+const tblNm = "첨부 파일";
 
 /** 첨부 파일 조회 */
 module.exports.select = function(attcFileSeq, cb) {
@@ -7,7 +8,8 @@ module.exports.select = function(attcFileSeq, cb) {
     datasource.query("SELECT ATTC_FILE_SEQ, STRG_TYPE_CD, FILE_NM, FILE_PATH, FILE_ORI_NM, FILE_SIZE, MIME_TYPE FROM SYS_ATTC_FILE WHERE ATTC_FILE_SEQ = ?", [attcFileSeq], function(err, results, fields) {
         
         if(err) {
-            cb("첨부 파일 등록 중 오류 발생");
+            err.userMsg = tblNm + " 조회 중 오류 발생";
+            cb(err);
         } else {
             
             if (results.length > 0) {
@@ -33,7 +35,8 @@ module.exports.insertLocal = function(data, cb) {
     datasource.insert("SYS_ATTC_FILE", dbData, function(err, results, fields) {
         
         if(err) {
-            cb("첨부 파일 등록 중 오류 발생");
+            err.userMsg = tblNm + " 조회 중 오류 발생";
+            cb(err);
         } else {
         
             cb(null, results, fields);

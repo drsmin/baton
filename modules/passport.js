@@ -25,7 +25,11 @@ module.exports = function() {
     }, function(req, userId, userPw, done) {
         comUser.selectLogin(userId, userPw, function (err, results) {
       
-        if (err) return done(err); // 서버 에러 처리
+        if (err) {
+            err.userMsg = "로그인 중 오류";
+            return done(err); // 서버 에러 처리
+        }
+
         if (!results || results.length === 0) return done(null, false);
       
         return done(null, results[0]); // 검증 성공
@@ -43,7 +47,11 @@ module.exports = function() {
     , function(req, accessTken, refreshToken, profile, done) {
         comUser.selectLoginFB(profile.id, function(err, results) {
             
-            if (err) return done(err, false); //서버 에러 처리
+            if (err) {
+                err.userMsg = "Facebook 연동 사용자 정보 처리중 오류";
+                return done(err, false); //서버 에러 처리
+            }
+
             if (!results || results.length === 0) {
                 
                 console.log(profile);
@@ -57,7 +65,8 @@ module.exports = function() {
                 comUser.insert(data, function (err, results) {
                     
                     if (err) {
-                        return done("회원 등록 중 오류", null);
+                        err.userMsg = "Facebook 연동 회원 등록 중 오류";
+                        return done(err, null);
                     }
                     
                     return done(null, data); // 검증 성공
@@ -80,7 +89,11 @@ module.exports = function() {
         , function(req, accessTken, refreshToken, profile, done) {
         comUser.selectLoginGG(profile.id, function(err, results) {
             
-            if (err) return done(err, false); //서버 에러 처리
+            if (err) {
+                err.userMsg = "google 연동 회원 처리 중 오류";
+                return done(err, false); //서버 에러 처리
+            }
+
             if (!results || results.length === 0) {
                 
                 console.log(profile);
@@ -97,7 +110,7 @@ module.exports = function() {
                 comUser.insert(data, function (err, results) {
                     
                     if (err) {
-                        return done("회원 등록 중 오류", null);
+                        return done("google 연동 회원 등록 중 오류", null);
                     } else {
                         return done(null, data); // 검증 성공                        
                     }

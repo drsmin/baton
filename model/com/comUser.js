@@ -1,5 +1,6 @@
 /** COM_USER 테이블 관련 사용자 객체 */
 const datasource = require(global.__base + '/modules/datasource.js');
+const tblNm = "사용자 정보";
 
 /** 로그인 */
 module.exports.selectLogin = function(userId, userPw, cb) {
@@ -7,7 +8,8 @@ module.exports.selectLogin = function(userId, userPw, cb) {
     datasource.query("SELECT * FROM COM_USER WHERE USER_ID = ? AND USER_PW = PASSWORD(?) AND SNS_DIV_CD = '10'", [userId, userPw], function(err, results, fields) {
         
         if(err) {
-            cb("사용자 정보 조회 중 오류 발생");
+            err.userMsg = tblNm + " 조회 중 오류 발생";
+            cb(err);
         } else {
             cb(null, results, fields);
         }
@@ -21,7 +23,8 @@ module.exports.selectLoginFB = function(userId, cb) {
     datasource.query("SELECT * FROM COM_USER WHERE USER_ID = ? AND SNS_DIV_CD = 'FB'", [userId], function(err, results, fields) {
         
         if(err) {
-            cb("사용자 정보 조회 중 오류 발생");
+            err.userMsg = tblNm + " 조회 중 오류 발생";
+            cb(err);
         } else {
             cb(null, results, fields);            
         }
@@ -35,7 +38,8 @@ module.exports.selectLoginGG = function(userId, cb) {
     datasource.query("SELECT * FROM COM_USER WHERE USER_ID = ? AND SNS_DIV_CD = 'GG'", [userId], function(err, results, fields) {
         
         if(err) {
-            cb("사용자 정보 조회 중 오류 발생");
+            err.userMsg = tblNm + " 정보 조회 중 오류 발생";
+            cb(err);
         }
         
         cb(null, results, fields);
@@ -79,6 +83,7 @@ module.exports.insert = function(data, cb) {
     datasource.query(sql, dbData, function(err, results, fields) {
         
         if(err) {
+            err.userMsg = tblNm + " 등록 중 오류 발생";
             cb(err);
         } else {
             cb(null, results, fields);            
@@ -97,7 +102,8 @@ module.exports.chkDupEmalAddr = function(emalAddr) {
         datasource.query("SELECT COUNT(1) AS CNT FROM COM_USER WHERE EMAL_ADDR = ?", [emalAddr], function(err, results, fields) {
             
             if(err) {
-                reject("사용자 정보 조회 중 오류 발생");
+                err.userMsg = tblNm + " 조회 중 오류 발생";
+                reject(err);
                 
             } else {
             

@@ -113,7 +113,8 @@ router.get('/selReg2/:svcSeq', commUtil.chkLogin, function(req, res, next) {
         svcSelGods.selectList({"SVC_SEQ" : req.params.svcSeq }, " ORDER BY SVC_SEQ, GODS_SEQ ", function (err, results) {
             
             if (err) {
-                reject();
+                //reject(err);
+                return next(err, req, res);
                 
             } else {
                 rParam["list"] = results;
@@ -148,7 +149,7 @@ router.post('/selReg2', commUtil.chkLogin, function(req, res, next) {
         svcSelMst.update(req.body, {"SVC_SEQ" : req.body.SVC_SEQ}, function (err, results) {
             
             if (err) {
-                throw new Error(err);
+                return next(err, req, res);
             } else {
                 res.redirect("/sel/selReg2/" + req.body.SVC_SEQ);
             }
@@ -160,7 +161,7 @@ router.post('/selReg2', commUtil.chkLogin, function(req, res, next) {
         svcSelMst.insert(req.body, function (err, results) {
             
             if (err) {
-                throw new Error(err);
+                return next(err, req, res);
             } else {
                 res.redirect("/sel/selReg2/" + results.insertId);
             }
@@ -187,7 +188,8 @@ router.post('/selReg3', commUtil.chkLogin, function(req, res, next) {
         svcSelGods.delete({"SVC_SEQ" : req.body.SVC_SEQ}, function (err, results) {
             
             if (err) {
-                reject();
+                //reject(err);
+                return next(err, req, res);
             } else {
                 
                 let godsNms = req.body.GODS_NM;
@@ -226,7 +228,8 @@ router.post('/selReg3', commUtil.chkLogin, function(req, res, next) {
                 svcSelGods.insert(data, function (err, results) {
                     
                     if(err) {
-                        reject(err);
+                        //reject(err);
+                        return next(err, req, res);
                     } else {
                         resolver({});
                     }
@@ -254,7 +257,8 @@ function getSvcMst(svcSeq) {
         svcSelMst.select(svcSeq, function (err, results, fields) {
             
             if (err) {
-                reject(err);
+                //reject(err);
+                return next(err, req, res);
             }
             
             if (results && results.length >= 1) {

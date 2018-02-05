@@ -17,7 +17,8 @@ router.get('/cdMngt', commUtil.chkAdmin, function(req, res, next) {
     sysCdDtl.selectList(cdGrp, function(err, results, fields) {
         
         if (err) {
-            throw new Error(err);
+            //throw new Error(err);
+            return next(err, req, res);
         }
         
         res.render("sys/cdMngt", {"CD_GRP" :  cdGrp, "list" : results});
@@ -55,7 +56,8 @@ router.get('/cdDtl', commUtil.chkAdmin, function(req, res, next) {
         sysCdDtl.select(cdGrp, cdVal, function(err, results, fields) {
             
             if (err) {
-                throw new Error(err);
+                //throw new Error(err);
+                return next(err, req, res);
             }
             
             if (results.length <= 0) {
@@ -74,7 +76,8 @@ router.get('/cdDtl', commUtil.chkAdmin, function(req, res, next) {
         sysCdDtl.delete(where, function(err, results, fields) {
             
             if (err) {
-                throw new Error(err);
+                //throw new Error(err);
+                return next(err, req, res);
             }
             
             res.redirect("/sys/cdMngt?CD_GRP=" + req.query.CD_GRP );
@@ -105,7 +108,8 @@ router.post('/cdDtl', commUtil.chkAdmin, function(req, res, next) {
         sysCdDtl.insert(req.body, function(err, results, fields) {
             
             if (err) {
-                throw new Error(err);
+                //throw new Error(err);
+                return next(err, req, res);
             }
             
             res.redirect("/sys/cdMngt?CD_GRP=" + req.body.O_CD_GRP );
@@ -121,7 +125,8 @@ router.post('/cdDtl', commUtil.chkAdmin, function(req, res, next) {
         sysCdDtl.update(req.body, where, function(err, results, fields) {
             
             if (err) {
-                throw new Error(err);
+                //throw new Error(err);
+                return next(err, req, res);
             }
             
             res.redirect("/sys/cdMngt?CD_GRP=" + req.body.O_CD_GRP );
@@ -137,7 +142,8 @@ router.get('/cdGrpMngt', commUtil.chkAdmin, function(req, res, next) {
     sysCdGrp.selectList(function(err, results, fields) {
         
         if (err) {
-            throw new Error(err);
+            //throw new Error(err);
+            return next(err, req, res);
         }
         
         res.render("sys/cdGrpMngt", {"list" : results});
@@ -167,7 +173,8 @@ router.get('/cdGrpDtl', commUtil.chkAdmin, function(req, res, next) {
         sysCdGrp.select(cdGrp, function(err, results, fields) {
             
             if (err) {
-                throw new Error(err);
+                //throw new Error(err);
+                return next(err, req, res);
             }
             
             if (results.length <= 0) {
@@ -204,7 +211,8 @@ router.post('/cdGrpDtl', commUtil.chkAdmin, function(req, res, next) {
         sysCdGrp.insert(req.body, function(err, results, fields) {
             
             if (err) {
-                throw new Error(err);
+                //throw new Error(err);
+                return next(err, req, res);
             }
             
             res.redirect("/sys/cdGrpMngt");
@@ -219,7 +227,8 @@ router.post('/cdGrpDtl', commUtil.chkAdmin, function(req, res, next) {
         sysCdGrp.update(req.body, where, function(err, results, fields) {
             
             if (err) {
-                throw new Error(err);
+                //throw new Error(err);
+                return next(err, req, res);
             }
             
             res.redirect("/sys/cdGrpMngt");

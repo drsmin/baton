@@ -26,6 +26,7 @@ module.exports.getCdList = function(cdGrp, callback) {
         sysCdDtl.selectList(cdGrp, function (err, results, fields) {
             
             if (err) {
+                err.userMsg = "공통 코드 조회 오류";
                 reject(err);
             }
             
@@ -46,6 +47,7 @@ module.exports.getCd = function(cdGrp, cdVal, callback) {
         sysCdDtl.select(cdGrp, cdVal, function (err, results, fields) {
             
             if (err) {
+                err.userMsg = "공통 코드 조회 오류";
                 reject(err);
             }
             

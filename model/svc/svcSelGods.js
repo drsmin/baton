@@ -26,7 +26,8 @@ module.exports.selectList = function(where, orderby, cb) {
     datasource.query(sql, sParam, function(err, results, fields) {
         
         if(err) {
-            cb(tblNm + " 정보 조회 중 오류 발생");
+            err.userMsg = tblNm + " 조회 중 오류 발생";
+            cb(err);
         } else {
             cb(null, results, fields);
         }
@@ -39,7 +40,8 @@ module.exports.select = function(svcSeq, godsSeq, cb) {
     datasource.query("SELECT SVC_SEQ, GODS_SEQ, GODS_NM, GODS_UPRC, GODS_DTL, REG_USER_ID, REG_DTTM, UPT_USER_ID, UPT_DTTM  FROM SVC_SEL_GODS WHERE SVC_SEQ = ? AND GODS_SEQ = ? ", [svcSeq, godsSeq], function(err, results, fields) {
         
         if(err) {
-            cb(tblNm + " 정보 조회 중 오류 발생");
+            err.userMsg = tblNm + " 조회 중 오류 발생";
+            cb(err);
         } else {
             cb(null, results, fields);
         }
@@ -68,7 +70,8 @@ module.exports.insert = function(data, cb) {
     datasource.insert("SVC_SEL_GODS", dbData, function(err, results, fields) {
         
         if(err) {
-            cb(tblNm + " 등록 중 오류 발생");
+            err.userMsg = tblNm + " 등록 중 오류 발생";
+            cb(err);
         }
         
         cb(null, results, fields);
@@ -89,7 +92,8 @@ module.exports.update = function(data, where, cb) {
     datasource.update("SVC_SEL_GODS", dbData, where, function(err, results, fields) {
         
         if(err) {
-            cb(tblNm + " 수정 중 오류 발생");
+            err.userMsg = tblNm + " 수정 중 오류 발생";
+            cb(err);
         } else {
             cb(null, results, fields);
         }
@@ -102,7 +106,8 @@ module.exports.delete = function(where, cb) {
     datasource.delete("SVC_SEL_GODS", where, function(err, results, fields) {
         
         if(err) {
-            cb(tblNm + "삭제 중 오류 발생");
+            err.userMsg = tblNm + " 조회 중 오류 발생";
+            cb(err);
         } else {
             cb(null, results, fields);            
         }

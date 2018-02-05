@@ -36,13 +36,16 @@ module.exports = function (req, res, paramNm, pathNm) {
     var promise = new Promise(function (resolve, reject) {
         
         upload(req, res, function (err) {
-            if (err) reject();
-            else {
+            if (err) {
+                err.userMsg = "업로드 중 오류";
+                reject(err);
+            } else {
                 
                 sysAttcFile.insertLocal(req.file, function(err, results) {
         
                     if(err) {
-                        reject();
+                        err.userMsg = "업로드 중 오류";
+                        reject(err);
                     } else {
                         
                         req.file["ATTC_FILE_SEQ"] = results.insertId;

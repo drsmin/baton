@@ -198,7 +198,7 @@ module.exports.update = function (tableNm, params, where, callback) {
         idx++;
     }
     
-    sql += " AND UPT_DTTM = NOW() ";
+    sql += " , UPT_DTTM = NOW() ";
     
     sql += " WHERE ";
     

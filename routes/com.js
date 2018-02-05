@@ -64,7 +64,7 @@ router.post("/joinUser", function (req, res, next) {
     comUser.insert(req.body, function(err, results) {
         
         if(err) {
-            return next(err);
+            return next(err, req, res);
         }
         
         req.flash("__msg", "회원 가입이 완료 되었습니다");
@@ -92,7 +92,8 @@ router.get("/logout", function (req, res, next) {
         req.session.destroy( function(err) {
             
             if(err) {
-                console.log(err);
+                //console.log(err);
+                return next(err, req, res);
             } else {
                 res.redirect('/');
             }
