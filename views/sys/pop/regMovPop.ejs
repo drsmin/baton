@@ -10,6 +10,19 @@
                     window.self.close();
                 });
             });
+            
+            function upload() {
+                document.forms[0].submit();
+            }
+            
+            <% if (typeof(attcFileSeq) != "undefined") { %>
+            window.onload = function () {
+                opener._regMovPopCb_<%= div %>('<%= attcFileSeq %>');
+                
+                alert("등록 되었습니다");
+                window.self.close();
+            }
+            <% } %>
         </script>
     </head>
 <body>
@@ -26,7 +39,10 @@
 
     <!-- Begin page content -->
     <main role="main" class="container">
-        <p class="lead">동영상 등록 팝업입니다.</code></p>
+        <form name="form" method="post" enctype="multipart/form-data">
+            <input type="file" id="file" name="file" required="true"/>
+            <input type="hidden" value="<%= div %>" />
+        </form>
     </main>
 
     <nav class="navbar fixed-bottom navbar-expand-sm navbar-light bg-light">

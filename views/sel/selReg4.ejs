@@ -8,14 +8,38 @@
             $(document).ready(function() {
                 
                 $("#imgRegPop").click(function () {
-                    openRegImgPop();
+                    openRegImgPop("img", 16, 9);
                 });
                 
                 $("#movRegPop").click(function () {
-                    openRegMovPop();
+                    openRegMovPop("mov");
                 });
                 
             });
+            
+            function _regImgPopCb_img(attcFileSeq) {
+                let carousel = $("#carousel");
+                
+                let isActive = carousel.find("div.carousel-item").removeClass("active");
+                
+                let item = '<div class="carousel-item active"><img class="d-block w-100" src="/imgView/' + attcFileSeq + '" /><input type="hidden" name="ATTC_FILE_SEQ" value="' + attcFileSeq + '" />';
+                item += '<div class="carousel-caption d-none d-md-block"><button type="button" class="btn btn-success">메인사진으로</button><button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></div></div>';
+                
+                
+                carousel.append(item);
+            }
+            
+            function _regMovPopCb_mov(attcFileSeq) {
+                let carousel = $("#carousel2");
+                
+                let isActive = carousel.find("div.carousel-item").removeClass("active");
+                
+                                        
+                let item = '<div class="carousel-item active"><div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item d-block w-100" src="/fileView/' + attcFileSeq + '"></div></iframe><input type="hidden" name="ATTC_FILE_SEQ2" value="' + attcFileSeq + '" />';
+                item += '<div class="carousel-caption d-none d-md-block"><button type="button" class="btn btn-success">메인영상으로</button><button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></div></div>';
+                
+                carousel.append(item);
+            }
         </script>
     </head>
 <body>
@@ -43,22 +67,77 @@
                 </div><!-- row -->
             </nav>
             <div class="mr30"></div>
-            <form action="/sel/selReg5">
+            <form action="/sel/selReg5" method="post">
+                <input type="hidden" name="SVC_SEQ" value="<%= SVC_SEQ %>" />
                 <div class="form-group row">
                     <label for="svcCtnt" class="col-sm-2 col-form-label">이미지 등록</label>
                     <div class="col-sm-10">
                         <button type="button" class="btn btn-info" id="imgRegPop">등록</button>
+                        <div class="mr10"></div>
+                        <div id="carouselCtl" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner" id="carousel">
+                                <% if (typeof(list) != "undefined") {
+                                        for (let idx = 0 , _max = list.length ; idx < _max ; idx ++) {
+                                            let item = list[idx];
+                                            let active = idx == 0 ? "active" : "";
+                                            %>
+                                <div class="carousel-item <%= active %>">
+                                    <img class="d-block w-100" src="/imgView/<%= item["ATTC_FILE_SEQ"] %>" />
+                                    <input type="hidden" name="ATTC_FILE_SEQ" value="<%= item["ATTC_FILE_SEQ"] %>" />
+                                    <div class="carousel-caption d-none d-md-block"><button type="button" class="btn btn-success">메인사진으로</button><button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></div>
+                                </div>
+                                <%      } 
+                                } %>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselCtl" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselCtl" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="svcCtnt" class="col-sm-2 col-form-label">동영상 등록</label>
                     <div class="col-sm-10">
                         <button type="button" class="btn btn-info" id="movRegPop">등록</button>
+                        <div class="mr10"></div>
+                        <div id="carouselCtl2" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner" id="carousel2">
+                                <% if (typeof(list2) != "undefined") {
+                                        for (let idx = 0 , _max = list2.length ; idx < _max ; idx ++) {
+                                            let item = list2[idx];
+                                            let active = idx == 0 ? "active" : "";
+                                            %>
+                                <div class="carousel-item <%= active %>">
+                                    <div class="embed-responsive embed-responsive-16by9">
+                                        <iframe class="embed-responsive-item d-block w-100" src="/fileView/<%= item["ATTC_FILE_SEQ"] %>"></iframe>
+                                    </div>
+                                    <input type="hidden" name="ATTC_FILE_SEQ2" value="<%= item["ATTC_FILE_SEQ"] %>" />
+                                    <div class="carousel-caption d-none d-md-block"><button type="button" class="btn btn-success">메인영상으로</button><button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></div>
+                                </div>
+                                <%      } 
+                                } %>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselCtl2" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselCtl2" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
                     </div>
+
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-6 text-left">
-                        <button type="button" class="btn btn-secondary" onclick="history.back()">이전</button>
+                        <button type="button" class="btn btn-secondary" onclick="location.href='/sel/selReg3/<%= SVC_SEQ %>'">이전</button>
                     </div>
                     <div class="col-sm-6 text-right">
                         <button type="submit" class="btn btn-primary">다음단계</button>

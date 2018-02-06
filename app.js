@@ -28,8 +28,8 @@ app.set('view engine', 'ejs');
 
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico'))); // favicon 설정 후 주석 제거
 app.use(logger('dev'));
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({ secret: 'batonbaton', resave: true, saveUninitialized: false })); // 세션 활성화
 app.use(flash());

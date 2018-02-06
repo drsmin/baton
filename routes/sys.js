@@ -252,9 +252,22 @@ router.post('/pop/regImgPop', function(req, res, next) {
         
         res.send(file["ATTC_FILE_SEQ"] + "");
     });
+});
 
-   
+/** 동영상 등록 팝업 */
+router.get('/pop/regMovPop/:div', function(req, res, next) {
     
+    res.render("sys/pop/regMovPop", {"div" : req.params.div});
+    
+});
+
+/** 동영상 등록 팝업 */
+router.post('/pop/regMovPop/:div', function(req, res, next) {
+    
+    upload(req, res, "file", "mov").then(function (file) {
+        
+        res.render("sys/pop/regMovPop", {"div" : req.params.div, "attcFileSeq" : file["ATTC_FILE_SEQ"]});
+    });
 });
 
 

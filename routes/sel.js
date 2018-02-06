@@ -4,6 +4,8 @@ const commUtil = require(__base + "/modules/commUtil.js");
 const router = express.Router();
 const svcSelMst = require(__base + "/model/svc/svcSelMst.js");
 const svcSelGods = require(__base + "/model/svc/svcSelGods.js");
+const svcSelImg = require(__base + "/model/svc/svcSelImg.js");
+const svcSelMov = require(__base + "/model/svc/svcSelMov.js");
 
 /** 판매 메인 */
 router.get('/selMst', function(req, res, next) {
@@ -105,7 +107,7 @@ router.get('/selReg2/:svcSeq', commUtil.chkLogin, function(req, res, next) {
     promises.push(promise2);
         
     promise2.then(function (result) {
-        rParam = result;
+        rParam = Object.assign(rParam, result);
     });
     
     let promise3 = new Promise(function (resolve, reject) {
@@ -114,11 +116,11 @@ router.get('/selReg2/:svcSeq', commUtil.chkLogin, function(req, res, next) {
             
             if (err) {
                 //reject(err);
-                return next(err, req, res);
+                next(err, req, res);
                 
             } else {
                 rParam["list"] = results;
-                resolve();
+                resolve({});
             }
             
         });
@@ -130,6 +132,106 @@ router.get('/selReg2/:svcSeq', commUtil.chkLogin, function(req, res, next) {
     Promise.all(promises).then(function () {
         
         res.render('sel/selReg2', rParam);
+	   
+    });
+});
+
+/** 판매등록3 */
+router.get('/selReg3/:svcSeq', commUtil.chkLogin, function(req, res, next) {
+    
+    let promises = [];
+    
+    let rParam = {};
+    
+    let promise2 = getSvcMst(req.params.svcSeq);
+        
+    promises.push(promise2);
+        
+    promise2.then(function (result) {
+        rParam = result;
+    });
+    
+    Promise.all(promises).then(function () {
+        
+        res.render('sel/selReg3', rParam);
+	   
+    });
+});
+
+/** 판매등록4 */
+router.get('/selReg4/:svcSeq', commUtil.chkLogin, function(req, res, next) {
+    
+    let promises = [];
+    
+    let rParam = {};
+    let svcSeq = req.params.svcSeq;
+    
+    let promise2 = getSvcMst(req.params.svcSeq);
+    
+    promises.push(promise2);
+        
+    promise2.then(function (result) {
+        
+        rParam = Object.assign(rParam, result);
+    });
+    
+    let promise3 = new Promise(function (resolver, reject) {
+        svcSelImg.selectList({"SVC_SEQ" : svcSeq}, null, function (err, results) {
+            
+            if (err) {
+                next(err, req, res);
+            } else {
+                rParam["list"] = results;
+                resolver();
+            }
+            
+        });
+    });
+    
+    promises.push(promise3);
+    
+    let promise4 = new Promise(function (resolver, reject) {
+        svcSelMov.selectList({"SVC_SEQ" : svcSeq}, null, function (err, results) {
+            
+            if (err) {
+                next(err, req, res);
+            } else {
+                rParam["list2"] = results;
+                resolver();
+            }
+            
+        });
+    });
+    
+    promises.push(promise4);
+    
+    Promise.all(promises).then(function () {
+        
+        res.render('sel/selReg4', rParam);
+	   
+    });
+});
+
+/** 판매등록5 */
+router.get('/selReg5/:svcSeq', commUtil.chkLogin, function(req, res, next) {
+    
+    let promises = [];
+    
+    let rParam = {};
+    let svcSeq = req.params.svcSeq;
+    
+    let promise2 = getSvcMst(req.params.svcSeq);
+    
+    promises.push(promise2);
+        
+    promise2.then(function (result) {
+        
+        rParam = Object.assign(rParam, result);
+    });
+    
+    Promise.all(promises).then(function () {
+        
+        res.render('sel/selReg5', rParam);
 	   
     });
 });
@@ -149,7 +251,7 @@ router.post('/selReg2', commUtil.chkLogin, function(req, res, next) {
         svcSelMst.update(req.body, {"SVC_SEQ" : req.body.SVC_SEQ}, function (err, results) {
             
             if (err) {
-                return next(err, req, res);
+                next(err, req, res);
             } else {
                 res.redirect("/sel/selReg2/" + req.body.SVC_SEQ);
             }
@@ -161,7 +263,7 @@ router.post('/selReg2', commUtil.chkLogin, function(req, res, next) {
         svcSelMst.insert(req.body, function (err, results) {
             
             if (err) {
-                return next(err, req, res);
+                next(err, req, res);
             } else {
                 res.redirect("/sel/selReg2/" + results.insertId);
             }
@@ -178,6 +280,8 @@ router.post('/selReg3', commUtil.chkLogin, function(req, res, next) {
     
     let rParam = {};
     
+    let svcSeq = req.body.SVC_SEQ;
+    
     //commUtil.setUserInfo(req.body, req.user);
     
     console.log(req.body);
@@ -185,17 +289,16 @@ router.post('/selReg3', commUtil.chkLogin, function(req, res, next) {
     //기존 상품정보 삭제 후 재등록
     let promise2 = new Promise(function (resolver, reject) {
         
-        svcSelGods.delete({"SVC_SEQ" : req.body.SVC_SEQ}, function (err, results) {
+        svcSelGods.delete({"SVC_SEQ" : svcSeq}, function (err, results) {
             
             if (err) {
                 //reject(err);
-                return next(err, req, res);
+                next(err, req, res);
             } else {
                 
                 let godsNms = req.body.GODS_NM;
                 let godsUprcs = req.body.GODS_UPRC;
                 let godsDtls = req.body.GODS_DTL;
-                let svcSeq = req.body.SVC_SEQ;
                 
                 let isArray = commUtil.isArray(godsNms);
                 
@@ -229,7 +332,7 @@ router.post('/selReg3', commUtil.chkLogin, function(req, res, next) {
                     
                     if(err) {
                         //reject(err);
-                        return next(err, req, res);
+                        next(err, req, res);
                     } else {
                         resolver({});
                     }
@@ -245,8 +348,184 @@ router.post('/selReg3', commUtil.chkLogin, function(req, res, next) {
     
     Promise.all(promises).then(function () {
         
-        res.render('sel/selReg3', rParam);
+        res.redirect("/sel/selReg3/" + svcSeq);
 	   
+    });
+});
+
+/** 판매등록4 Post */
+router.post('/selReg4', commUtil.chkLogin, function(req, res, next) {
+    
+    let promises = [];
+    
+    let rParam = {};
+    let svcSeq = req.body.SVC_SEQ;
+    
+    commUtil.setUserInfo(req.body, req.user);
+    
+    svcSelMst.update(req.body, {"SVC_SEQ" : svcSeq}, function (err, results) {
+        
+        if (err) {
+            next(err, req, res);
+        } else {
+            res.redirect("/sel/selReg4/" + svcSeq);
+        }
+        
+    });
+});
+
+/** 판매등록5 Post */
+router.post('/selReg5', commUtil.chkLogin, function(req, res, next) {
+    
+    let promises = [];
+    
+    let rParam = {};
+    
+    let svcSeq = req.body.SVC_SEQ;
+    
+    commUtil.setUserInfo(req.body, req.user);
+    
+    //기존 이미지 삭제 후 재등록
+    let promise2 = new Promise(function (resolver, reject) {
+        
+        svcSelImg.delete({"SVC_SEQ" : svcSeq}, function (err, results) {
+            
+            if (err) {
+                //reject(err);
+                next(err, req, res);
+            } else {
+                
+                let attcFileSeqs = req.body.ATTC_FILE_SEQ;
+                
+                if (!attcFileSeqs) { return resolver(); };
+                
+                let isArray = commUtil.isArray(attcFileSeqs);
+                
+                let data = null;
+                
+                if (isArray) {
+                    
+                    data = [];
+                    
+                    for (let idx = 0, _max = attcFileSeqs.length ; idx < _max ; idx ++) {
+                        
+                        let attcFileSeq = attcFileSeqs[idx];
+                        
+                        let row = {"SVC_SEQ" : svcSeq, "ATTC_FILE_SEQ" : attcFileSeq};
+                        row["SVC_IMG_SEQ"] = idx + 1;
+                        
+                        commUtil.setUserInfo(row, req.user);
+                        
+                        data.push(row);
+                    }
+                } else {
+                    
+                    data = { "SVC_SEQ" : svcSeq, "SVC_IMG_SEQ" : 1, "ATTC_FILE_SEQ" : attcFileSeqs };
+                    
+                    commUtil.setUserInfo(data, req.user);
+                }
+                
+                svcSelImg.insert(data, function (err, results) {
+                    
+                    if(err) {
+                        //reject(err);
+                        next(err, req, res);
+                    } else {
+                        resolver({});
+                    }
+                    
+                });
+            }
+            
+        });
+        
+    });
+    
+    promises.push(promise2);
+    
+    //기존 동영상 삭제 후 재등록
+    let promise3 = new Promise(function (resolver, reject) {
+        
+        svcSelMov.delete({"SVC_SEQ" : svcSeq}, function (err, results) {
+            
+            if (err) {
+                //reject(err);
+                next(err, req, res);
+            } else {
+                
+                let attcFileSeqs = req.body.ATTC_FILE_SEQ2;
+                
+                if (!attcFileSeqs) { return resolver(); }
+                
+                let isArray = commUtil.isArray(attcFileSeqs);
+                
+                let data = null;
+                
+                if (isArray) {
+                    
+                    data = [];
+                    
+                    for (let idx = 0, _max = attcFileSeqs.length ; idx < _max ; idx ++) {
+                        
+                        let attcFileSeq = attcFileSeqs[idx];
+                        
+                        let row = {"SVC_SEQ" : svcSeq, "ATTC_FILE_SEQ" : attcFileSeq};
+                        row["SVC_MOV_SEQ"] = idx + 1;
+                        
+                        commUtil.setUserInfo(row, req.user);
+                        
+                        data.push(row);
+                    }
+                } else {
+                    
+                    data = { "SVC_SEQ" : svcSeq, "SVC_MOV_SEQ" : 1, "ATTC_FILE_SEQ" : attcFileSeqs };
+                    
+                    commUtil.setUserInfo(data, req.user);
+                }
+                
+                svcSelMov.insert(data, function (err, results) {
+                    
+                    if(err) {
+                        //reject(err);
+                        next(err, req, res);
+                    } else {
+                        resolver({});
+                    }
+                    
+                });
+            }
+            
+        });
+        
+    });
+    
+    promises.push(promise3);
+    
+    
+    Promise.all(promises).then(function () {
+        res.redirect("/sel/selReg5/" + svcSeq);
+    });
+        
+});
+
+/** 판매등록5 Post */
+router.post('/selRegOk', commUtil.chkLogin, function(req, res, next) {
+    
+    let promises = [];
+    
+    let rParam = {};
+    let svcSeq = req.body.SVC_SEQ;
+    
+    commUtil.setUserInfo(req.body, req.user);
+    
+    svcSelMst.update(req.body, {"SVC_SEQ" : svcSeq}, function (err, results) {
+        
+        if (err) {
+            next(err, req, res);
+        } else {
+            res.redirect("/sel/selRegOk/" + svcSeq);
+        }
+        
     });
 });
 
