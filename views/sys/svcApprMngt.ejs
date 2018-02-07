@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>서비스 승인인 관리</title>
+        <% include sys/inc/_jscss %>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#tblList > tbody > tr").dblclick(function () {
+                    
+                    let _this = $(this);
+                    
+                    location.href = "/sys/cdDtl?procDiv=U&CD_GRP=" + _this.attr("keyVal") + "&CD_VAL=" + _this.attr("keyVal2");
+                });
+            });
+            
+            //승인 처리
+            function appr(svcSeq) {
+                if (true == confirm("승인 하시겠습니까?")) {
+                    
+                }
+            }
+            
+            //반려 처리
+            function rejt(svcSeq) {
+                if (true == confirm("반려 하시겠습니까?")) {
+                    
+                }
+            }
+        </script>
+    </head>
+<body>
+
+<% include sys/inc/_header %>
+<% include sys/inc/_navSys %>
+
+    <!-- Begin page content -->
+    <main role="main">
+      <div class="container">
+        <div class="mr30"></div>
+        <h5>승인 대기 서비스 목록</h5>
+        <div class="col-sm">
+            <table class="table table-bordered" id="tblList">
+                <thead>
+                    <tr>
+                        <th scope="col">서비스번호</th>
+                        <th scope="col">서비스명</th>
+                        <th scope="col">등록자</th>
+                        <th scope="col">등록 일시</th>
+                        <th scope="col">#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (!list || list.length == 0) { %>
+                    <tr>
+                        <td class="text-center" colspan="5" scope="row">검색 결과가 없습니다</td>
+                    </tr>
+                    <% } else {
+                        for (let idx = 0, _max = list.length ; idx < _max ; idx ++) {
+                            let row = list[idx]; %>
+                    <tr style="cursor:pointer;" keyVal="<%= row["SVC_SEQ"] %>">
+                        <td><%= row["SVC_SEQ"] %></td>
+                        <td><%= row["SVC_TITL"] %></td>
+                        <td><%= row["SEL_USER_ID"] %></td>
+                        <td><%= row["UPT_DTTM"] %></td>
+                        <td><button type="button" class="btn btn-success" onclick="appr(<%= row["SVC_SEQ"] %>)">승인</button><button type="button" class="btn btn-danger" onclick="rejt(<%= row["SVC_SEQ"] %>)">반려</button></td>
+                    </tr>
+                    <% }
+                    } %>
+                </tbody>
+            </table>
+        </div>
+        <div class="mr20"></div>
+        <div class="col-sm">
+            <% var navCnt = 5, href = "/sys/svcApprMngt?page="; %>
+            <% include sys/inc/_page %>
+        </div>
+    </main>
+
+<% include sys/inc/_footer %>
+</body>
+</html>

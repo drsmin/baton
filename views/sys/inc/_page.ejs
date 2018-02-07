@@ -1,0 +1,39 @@
+<% 
+// page = 현재 페이지, pCnt = 페이지당 건수, navCnt = 네비게이션 표시건수, totCnt = 전체건수, href = 링크
+let navStartNo = Math.floor(page / navCnt) + 1;
+let navEndNo = navStartNo + navCnt - 1;
+let lastPage = Math.ceil(totCnt / pCnt);
+if (navEndNo > lastPage) navEndNo = lastPage;
+ %>
+<nav aria-label="...">
+    <ul class="pagination justify-content-center">
+        <% if (1 == navStartNo) { %>
+        <li class="page-item disabled">
+            <span class="page-link">Previous</span>
+        </li>
+        <% } else { %>
+        <li class="page-item">
+            <a class="page-link" href="<%= href + (navStartNo - 1) %>">Previous</a>
+        </li>
+        <% } %>
+        
+        <% for (idx = navStartNo ; idx <= navEndNo ; idx ++) { %>
+        
+        <% if (page == idx) { %>
+        <li class="page-item active"><span class="page-link"><%= idx %><span class="sr-only">(current)</span></span>
+        <% } else { %>
+        <li class="page-item"><a class="page-link" href="<%= href + idx %>"><%= idx %></a></li>
+        <% } %>
+        <% } %>
+        
+        <% if (navEndNo >= lastPage) { %>
+        <li class="page-item disabled">
+            <span class="page-link">Next</span>
+        </li>
+        <% } else { %>
+        <li class="page-item">
+            <a class="page-link" href="<%= href + (navEndNo + 1) %>">Next</a>
+        </li>
+        <% } %>
+    </ul>
+</nav>

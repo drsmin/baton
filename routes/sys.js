@@ -1,9 +1,10 @@
 const express  = require('express');
-const commUtil = require(global.__base + "/modules/commUtil.js");
+const commUtil = require(__base + "/modules/commUtil.js");
 const router   = express.Router();
-const sysCdGrp = require(global.__base + '/model/sys/sysCdGrp.js');
-const sysCdDtl = require(global.__base + '/model/sys/sysCdDtl.js');
+const sysCdGrp = require(__base + '/model/sys/sysCdGrp.js');
+const sysCdDtl = require(__base + '/model/sys/sysCdDtl.js');
 const upload = require(__base + 'modules/upload.js');
+const svcSelMst = require(__base + '/model/svc/svcSelMst.js');
 
 /** 코드 관리 */
 router.get('/cdMngt', commUtil.chkAdmin, function(req, res, next) {
@@ -61,7 +62,8 @@ router.get('/cdDtl', commUtil.chkAdmin, function(req, res, next) {
             }
             
             if (results.length <= 0) {
-                throw new Error(cdGrp + " 코드 데이터가 존재 하지 않습니다");
+                let err = new Error(cdGrp + " 코드 데이터가 존재 하지 않습니다");
+                return next(err, req, res);
             }
             
             res.render("sys/cdDtl", {"procDiv" : procDiv, "CD_GRP" : cdGrp, "item" : results[0]});
@@ -91,14 +93,16 @@ router.get('/cdDtl', commUtil.chkAdmin, function(req, res, next) {
 router.post('/cdDtl', commUtil.chkAdmin, function(req, res, next) {
 
     if (!req.body.procDiv) {
-        throw new Error('인수 [처리 구분] 이 없습니다');
+        err.userMsg = '인수 [처리 구분] 이 없습니다';
+        return next(err, req, res);
     }
     
     let procDiv = req.query.procDiv;
 
     //Validation
     if (!req.body.O_CD_GRP) {
-        throw new Error('필수 항목 [코드 그룹] 이 없습니다');
+        err.userMsg = '필수 항목 [코드 그룹] 이 없습니다';
+        return next(err, req, res);
     }
     
     req.body["CD_GRP"] = req.body.O_CD_GRP;
@@ -270,6 +274,54 @@ router.post('/pop/regMovPop/:div', function(req, res, next) {
     });
 });
 
+/** 서비스 승인 관리 */
+router.get("/svcApprMngt", commUtil.chkAdmin, function(req, res, next) {
+    
+    let rParam = {};
+    
+    let promises = [];
+    
+    //페이지
+    let page = req.query.page || 1;
+    
+    //페이지당 건수
+    let pCnt = req.query.pCnt || 5;
+
+    rParam["page"] = page;
+    rParam["pCnt"] = pCnt;
+    
+    let promise1 = new Promise(function (resolver, reject) {
+        svcSelMst.selectCnt({"SVC_STAT_CD" : "20"}, function (err, cnt) {
+            if (err) {
+                next(err, req, res);
+                reject(err);
+            } else {
+                rParam["totCnt"] = cnt;
+                resolver();
+            }
+        });
+    });
+    
+    promises.push(promise1);
+    
+    let promise2 = new Promise(function (resolver, reject) {
+        svcSelMst.selectList({"SVC_STAT_CD" : "20"}, {"PAGE" : page, "CNT" : pCnt}, " ORDER BY UPT_DTTM DESC ", function (err, results) {
+            if (err) {
+                next(err, req, res);
+                reject();
+            } else {
+                rParam["list"] = results;
+                resolver();
+            }
+        });
+    });
+    
+    promises.push(promise2);
+    
+    Promise.all(promises).then(function () {
+        res.render("sys/svcApprMngt", rParam);
+    });
+});
 
 /** 기본 라우터 */
 commUtil.commRoute("sys/", router);

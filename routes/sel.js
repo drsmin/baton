@@ -244,6 +244,7 @@ router.post('/selReg2', commUtil.chkLogin, function(req, res, next) {
     let rParam = {};
     
     req.body.SEL_USER_ID = req.user["USER_ID"];
+    req.body["SVC_STAT_CD"] = "10"; //서비스 상태 코드 '임시저장'
     commUtil.setUserInfo(req.body, req.user);
     
     //서비스 순번이 있는경우 Update
@@ -517,15 +518,15 @@ router.post('/selRegOk', commUtil.chkLogin, function(req, res, next) {
     let svcSeq = req.body.SVC_SEQ;
     
     commUtil.setUserInfo(req.body, req.user);
+    req.body["SVC_STAT_CD"] = "20"; //서비스 상태코드 '작성완료'
     
     svcSelMst.update(req.body, {"SVC_SEQ" : svcSeq}, function (err, results) {
         
         if (err) {
             next(err, req, res);
         } else {
-            res.redirect("/sel/selRegOk/" + svcSeq);
+            res.redirect("/sel/selRegOk");
         }
-        
     });
 });
 

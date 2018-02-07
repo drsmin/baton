@@ -3,7 +3,7 @@ const datasource = require(__base + '/modules/datasource.js');
 const tblNm = "판매 마스터";
 
 /** 리스트 조회 */
-module.exports.selectList = function(where, orderby, cb) {
+module.exports.selectList = function(where, pageInfo, orderby, cb) {
     
     let sql = "SELECT SVC_SEQ, SEL_USER_ID, SVC_STAT_CD, SVC_TITL, CAT_CD, SVC_TYPE, SVC_DTL, SVC_AS, SVC_REQ_DTL, REG_USER_ID, REG_DTTM, UPT_USER_ID, UPT_DTTM  FROM SVC_SEL_MST WHERE 1=1 ";
     
@@ -20,6 +20,16 @@ module.exports.selectList = function(where, orderby, cb) {
     
     if (orderby) {
         sql += " " + orderby;
+    }
+    
+    if (pageInfo) {
+        sql = "SELECT * FROM (" + sql;
+        sql += ") A LIMIT ?, ? ";
+        let page = pageInfo["PAGE"];
+        let cnt = pageInfo["CNT"];
+        
+        sParam.push((page - 1) * cnt);
+        sParam.push(cnt);
     }
     
     datasource.query(sql, sParam, function(err, results, fields) {
@@ -95,6 +105,39 @@ module.exports.update = function(data, where, cb) {
             cb(err);
         } else {
             cb(null, results, fields);            
+        }
+    });
+};
+
+/** 건수 조회 */
+module.exports.selectCnt = function(where, cb) {
+    
+    let sql = "SELECT COUNT(1) AS CNT FROM SVC_SEL_MST WHERE 1=1 ";
+    
+    let sParam = [];
+    
+    if(where) {
+        
+        for (let key in where) {
+            sql += "AND " + key + " = ?";
+            sParam.push(where[key]);
+        }
+
+    }
+    
+    datasource.query(sql, sParam, function(err, results, fields) {
+        
+        if(err) {
+            err.userMsg = tblNm + " 건수 조회 중 오류 발생";
+            cb(err);
+        } else {
+            let cnt = 0;
+            
+            if (results || results.length > 0) {
+                cnt = results[0]["CNT"];
+            }
+            
+            cb(null, cnt);
         }
     });
 };
