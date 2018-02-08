@@ -40,8 +40,10 @@
                 </form>
             </div>
             <div class="col-sm-10 text-center">
-                
                 <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">등록일순</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">리뷰순</a>
                     </li>
@@ -52,31 +54,34 @@
                         <a class="nav-link" href="#">별점순</a>
                     </li>
                 </ul>
-                <% for (let idx = 0 ; idx < 2 ; idx ++) { %>
-                <div class="mr20"></div>
-                <!-- Three columns of text below the carousel -->
                 <div class="row text-left">
-                    <% for (let jdx = 0 ; jdx < 4 ; jdx++) { %>
-                    <div class="col-lg-3">
+                    <% if (!list || list.length <= 0) { %>
+                    <div class="col-sm">
+                        <h3>검색 결과가 없습니다</h3>
+                    </div>
+                    <% } else {
+                        
+                        for (let idx = 0, _max = list.length ; idx < _max ; idx ++) {
+                            let item = list[idx];
+                        %>
+                    <div class="col-sm-3">
                         <div class="row">
                             <div class="col-sm">
-                                <a href="/sel/selDtl?selTitle=제목<%= (idx * jdx +1) %>">
-                                <img class="Thumbnail" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="100%" height="auto" alt="썸네일">
+                                <a href="/sel/selDtl/<%= item["SVC_SEQ"] %>">
+                                <img class="Thumbnail" src="/imgView/<%= item["ATTC_FILE_SEQ"] %>" width="160" height="90" alt="썸네일" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=='">
                                 </a>
                             </div>
                         </div>
                         <div class="mr10"></div>
                         <div class="row">
                             <div class="col-sm">
-                                <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="프리랜서" width="70" height="70"> 판매자<%= ((idx * 4) + jdx + 1) %>
+                                <img class="rounded-circle" src="/imgView/<%= item["PRFL_FILE_SEQ"] %>" alt="프리랜서" width="70" height="70" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=='"> <%= item["USER_NM"] %>
                             </div>
                         </div>
                         <div class="mr10"></div>
                         <div class="row">
                             <div class="col-sm">
-                                <a href="/sel/selDtl?selTitle=제목<%= ((idx * 4) + jdx + 1) %>">
-                                저는 아무거나 할 수 있습니다.
-                                </a>
+                                <a href="/sel/selDtl/<%= item["SVC_SEQ"] %>"><%= item["SVC_TITL"] %></a>
                             </div>
                         </div>
                         <div class="mr10"></div>
@@ -91,31 +96,15 @@
                                 Korean
                             </div>
                         </div>
-                    </div><!-- /.col-lg-3 -->
-                    <% } %>
+                    </div><!-- /.col-sm-3 -->
+                    <% }
+                    } %>
                 </div><!-- /.row -->
-                <% } %>
                 <div class="mr30"></div>
                 <div class="row">
                     <div class="col-sm">
-                        <nav aria-label="...">
-                          <ul class="pagination justify-content-center">
-                            <li class="page-item disabled">
-                              <span class="page-link">Previous</span>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item active">
-                              <span class="page-link">
-                                2
-                                <span class="sr-only">(current)</span>
-                              </span>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                              <a class="page-link" href="#">Next</a>
-                            </li>
-                          </ul>
-                        </nav>
+                        <% var navCnt = 5, href = "/svc/selMst?cat=" + catCd + "&page="; %>
+                        <% include sys/inc/_page %>
                     </div>
                 </div>
             </div>

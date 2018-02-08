@@ -10,7 +10,32 @@ const svcSelMov = require(__base + "/model/svc/svcSelMov.js");
 /** 판매 메인 */
 router.get('/selMst', function(req, res, next) {
     
-    console.log("cat %s", req.query.cat);
+    let promises = [];
+    
+    let rParam = {};
+    
+    let catCd = req.query.cat;
+    
+    //페이지
+    let page = req.query.page || 1;
+    
+    //페이지당 건수
+    let pCnt = 8;
+    
+    //조건
+    let where = {};
+    
+    //정렬 순서
+    let order = req.query.order || "10";
+    let orderStr = "";
+    
+    if ("10" == order) {
+        orderStr = " ORDER BY A.REG_DTTM DESC ";
+    }
+    
+    rParam["page"] = page;
+    rParam["pCnt"] = pCnt;
+    rParam["order"] = order;
     
     let promise1 = commUtil.getCdList("CAT_CD").then(function (results) {
        
@@ -18,20 +43,53 @@ router.get('/selMst', function(req, res, next) {
        
     });
     
-    let cat;
+    promises.push(promise1);
     
-    let promis2 = commUtil.getCd("CAT_CD", req.query.cat).then(function (results) {
+    let promise2 = commUtil.getCd("CAT_CD", catCd).then(function (results) {
        
-        cat = {"catCd" : results["CD_VAL"], "catNm" : results["CD_NM"]};
+        rParam["cat"] = {"catCd" : results["CD_VAL"], "catNm" : results["CD_NM"]};
        
     });
     
-    Promise.all([promise1, promis2]).then(function () {
+    promises.push(promise2);
+    
+    let promise3 = new Promise(function (resolver, reject) {
         
-        res.render("sel/selMst", {"cat" : cat});
+        svcSelMst.selectListMst(catCd, where, {"PAGE" : page, "CNT" : pCnt}, orderStr, function (err, results) {
+            if (err) {
+                next(err, req, res);
+                reject();
+            } else {
+                rParam["list"] = results;
+                resolver();
+            }
+        });
+        
+    });
+    
+    promises.push(promise3);
+    
+    let promise4 = new Promise(function (resolver, reject) {
+        
+        svcSelMst.selectMstCnt(catCd, where, function (err, cnt) {
+            if (err) {
+                next(err, req, res);
+                reject();
+            } else {
+                rParam["totCnt"] = cnt;
+                resolver();
+            }
+        });
+        
+    });
+    
+    promises.push(promise4);
+    
+    Promise.all(promises).then(function () {
+        
+        res.render("sel/selMst", rParam);
 	   
     });
-    
     
 });
 

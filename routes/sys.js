@@ -323,6 +323,40 @@ router.get("/svcApprMngt", commUtil.chkAdmin, function(req, res, next) {
     });
 });
 
+/** 승인 처리 */
+router.get("/svcAppr/:svcSeq", commUtil.chkAdmin, function (req, res, next) {
+    
+    let referer = req.header('Referer');
+    
+    let svcSeq = req.params.svcSeq;
+    
+    svcSelMst.update({"SVC_STAT_CD" : "30"}, {"SVC_SEQ" : svcSeq}, function (err, results) {
+        
+        if (err) {
+            next(err, req, res);
+        } else {
+            res.redirect(referer);
+        }
+    });
+});
+
+/** 반려 처리 */
+router.post("/svcRjct", commUtil.chkAdmin, function (req, res, next) {
+    
+    let referer = req.header('Referer');
+    
+    let svcSeq = req.body.SVC_SEQ;
+    
+    svcSelMst.update({"SVC_STAT_CD" : "40", "RJCT_CTNT" : req.body.RJCT_CTNT }, {"SVC_SEQ" : svcSeq}, function (err, results) {
+        
+        if (err) {
+            next(err, req, res);
+        } else {
+            res.redirect(referer);
+        }
+    });
+});
+
 /** 기본 라우터 */
 commUtil.commRoute("sys/", router);
 

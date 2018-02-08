@@ -58,7 +58,7 @@ router.get('/joinUser', function(req, res, next) {
 /** 회원 가입 처리 */
 router.post("/joinUser", function (req, res, next) {
     
-    req.body["USER_ID"] = req.body.EMAL_ADDR;
+    //req.body["USER_ID"] = req.body.EMAL_ADDR;
     req.body["SNS_DIV_CD"] = "10";
     
     comUser.insert(req.body, function(err, results) {
@@ -72,6 +72,14 @@ router.post("/joinUser", function (req, res, next) {
         res.redirect("/");
     });
     
+});
+
+/** 이메일 중복 체크 */
+router.post("/chkDupUserId", function (req, res, next) {
+    
+    comUser.chkDupUserId(req.body.USER_ID).then(function (results) {
+        res.send(results);
+    });
 });
 
 /** 이메일 중복 체크 */
@@ -129,9 +137,6 @@ router.get('/login/google/callback', passport.authenticate('google', {
     failureFlash : 'Google 로그인을 실패 했습니다.' })
 );
 
-/** 기본 라우터 */
-commUtil.commRoute("com/", router);
-
 /** 판매자 등록 */
 router.get('/joinSeller', function(req, res, next) {
     
@@ -142,5 +147,63 @@ router.get('/joinSeller', function(req, res, next) {
     }
 
 });
+
+/** 회원 정보 수정 */
+router.get('/uptUserInfo', commUtil.chkLogin, function(req, res, next) {
+    
+    let rParam = {};
+    let promises = [];
+    
+    let promise1 = commUtil.getCdList("LNGG_CD").then(function (results) {
+       
+        rParam["lnggCd"] = results;
+       
+    });
+    
+    promises.push(promise1);
+   
+    let promise2 = commUtil.getCdList("NATI_CD").then(function (results) {
+       
+        rParam["natiCd"] = results;
+
+    });
+    
+    promises.push(promise2);
+    
+    let promise3 = new Promise(function (resolver, reject) {
+        
+        let userId = req.user.USER_ID;
+
+        comUser.select(userId, function (err, results) {
+            
+            if(err) {
+                next(err, req, res);
+                reject();
+            } else {
+                Object.assign(rParam, results);
+                resolver();
+            }
+            
+        });
+        
+    });
+    
+    promises.push(promise3);
+   
+    Promise.all(promises).then(function () {
+	   
+        res.render('com/uptUserInfo', rParam);
+    });
+        
+});
+
+/** 회원 정보 수정 */
+router.post('/uptUserInfo', commUtil.chkLogin, function(req, res, next) {
+    
+    comUser.upate
+}
+
+/** 기본 라우터 */
+commUtil.commRoute("com/", router);
 
 module.exports = router;

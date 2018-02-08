@@ -1,31 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>회원가입</title>
+        <title>회원정보수정</title>
         <% include sys/inc/_jscss %>
         <script src="/js/comm.js"></script>
         <script type="text/javascript">
             
-            let dupEmalAddr = false;
-            let dupUserId = false;
+            let dupEmalAddr = true;
         
             $(document).ready(function () {
-                
-                $("#USER_ID").blur(function () {
-                    
-                    let $this = $(this);
-                    
-                    if ($this.val() == "") {
-                        return;
-                    }
-                    
-                    _sendAjax("/com/chkDupUserId", {"USER_ID" : $this.val()}, function (data) {
-                        dupUserId = data;
-                        
-                        _validFormItem($("#USER_ID"), $("#dupUserId"), "사용할 수 있는 ID 입니다", "이미 사용중인 ID 입니다", data);
-                    });
-                    
-                });
                 
                 $("#EMAL_ADDR").blur(function () {
                     
@@ -79,45 +62,46 @@
     <main role="main">
       <div class="container">
         <div class="mr30"></div>
-        <h1>무료회원가입</h1>
+        <h1>회원정보수정</h1>
             <form method="post" onsubmit="return _onsubmit();" >
+                <% if ("10" == SNS_DIV_CD) { %>
                 <div class="form-group">
                     <label for="USER_ID">아이디</label>
-                    <input type="text" class="form-control" id="USER_ID" name="USER_ID" placeholder="아이디" required />
-                    <div id="dupUserId"></div>
+                    <input type="email" class="form-control" id="USER_ID" name="USER_ID" aria-describedby="emailHelp" placeholder="아이디" value="<%= USER_ID %>" required disabled />
                 </div>
+                <% } %>
                 <div class="form-group">
-                    <label for="">이메일</label>
-                    <input type="email" class="form-control" id="EMAL_ADDR" name="EMAL_ADDR" aria-describedby="emailHelp" placeholder="이메일" required />
+                    <label for="EMAL_ADDR">이메일</label>
+                    <input type="email" class="form-control" id="EMAL_ADDR" name="EMAL_ADDR" aria-describedby="emailHelp" placeholder="이메일" value="<%= EMAL_ADDR %>" required />
                     <div id="dupEmalAddr"></div>
                 </div>
                 <div class="form-group">
-                    <label for="">비밀번호</label>
-                    <input type="password" class="form-control" id="USER_PW" name="USER_PW" placeholder="비밀번호" required />
+                    <label for="USER_PW">비밀번호(변경시만 입력)</label>
+                    <input type="password" class="form-control" id="USER_PW" name="USER_PW" placeholder="비밀번호" />
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">비밀번호 확인</label>
-                    <input type="password" class="form-control" id="USER_PW2" name="USER_PW2" placeholder="비밀번호확인" required />
+                    <label for="USER_PW2">비밀번호 확인</label>
+                    <input type="password" class="form-control" id="USER_PW2" name="USER_PW2" placeholder="비밀번호확인" />
                 </div>
                 <div class="form-group">
                     <label for="imgPRFL_FILE_SEQ">프로필 사진</label>
                     <br/>
-                    <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" id="imgPRFL_FILE_SEQ" width="70" height="70">
-                    <input type="hidden" name="PRFL_FILE_SEQ" id="PRFL_FILE_SEQ" />
-                    <button type="button" class="btn btn-info" onclick="openRegImgPop('prfl', '1', '1')">등록</button>
+                    <img class="rounded-circle" src="/imgView/<%= PRFL_FILE_SEQ %>" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=='" id="imgPRFL_FILE_SEQ" width="70" height="70">
+                    <input type="hidden" name="PRFL_FILE_SEQ" id="PRFL_FILE_SEQ" value="<%= PRFL_FILE_SEQ %>" />
+                    <button type="button" class="btn btn-info" onclick="openRegImgPop('prfl', '1', '1')">수정</button>
                 </div>
-
                 <div class="form-group">
                     <label for="">이름</label>
-                    <input type="text" class="form-control" id="USER_NM" name="USER_NM" placeholder="이름" required />
+                    <input type="text" class="form-control" id="USER_NM" name="USER_NM" placeholder="이름" <%= USER_NM %> required />
                 </div>
                 <div class="form-row">
                     <div class="col-sm-6">
                         <label for="">국적</label>
                         <select class="form-control" id="NATI_CD" name="NATI_CD">
                             <% for (let idx = 0, _max = natiCd.length ; idx < _max ; idx ++) {
-                                let item = natiCd[idx]; %>
-                            <option value="<%= item["CD_VAL"] %>"><%= item["CD_NM"] %></option>
+                                let item = natiCd[idx];
+                                let selected = NATI_CD == item["CD_VAL"] ? "selected" : ""; %>
+                            <option value="<%= item["CD_VAL"] %>" <%= selected %>><%= item["CD_NM"] %></option>
                             <% } %>
                         </select>
                     </div>
@@ -125,49 +109,51 @@
                         <label for="">언어</label>
                         <select class="form-control" id="LNGG_CD" name="LNGG_CD">
                             <% for (let idx = 0, _max = lnggCd.length ; idx < _max ; idx ++) {
-                                let item = lnggCd[idx]; %>
-                            <option value="<%= item["CD_VAL"] %>"><%= item["CD_NM"] %></option>
+                                let item = lnggCd[idx];
+                                let selected = LNGG_CD == item["CD_VAL"] ? "selected" : "";%>
+                            <option value="<%= item["CD_VAL"] %>" <%= selected %>><%= item["CD_NM"] %></option>
                             <% } %>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="">사는곳</label>
-                    <input type="text" class="form-control" id="LIVE_AREA" name="LIVE_AREA" placeholder="사는곳">
+                    <input type="text" class="form-control" id="LIVE_AREA" name="LIVE_AREA" placeholder="사는곳" value="<%= LIVE_AREA %>" />
                 </div>
                 <div class="form-group">
                     <label for="">생년월일</label>
-                    <input type="date" class="form-control" id="BITH" name="BITH" placeholder="생년월일" />
+                    <input type="date" class="form-control" id="BITH" name="BITH" placeholder="생년월일" value="<%= BITH %>" />
                 </div>
                 <div class="form-group">
                     <label for="">휴대폰 번호</label>
-                    <input type="tel" class="form-control" id="CPHN_NO" name="CPHN_NO" placeholder="휴대폰번호" />
+                    <input type="tel" class="form-control" id="CPHN_NO" name="CPHN_NO" placeholder="휴대폰번호" value="<%= CPHN_NO %>" />
                     
                 </div>
                 
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="USER_DIV_CD" id="USER_DIV_CD_01" value="10" checked />
+                    <input class="form-check-input" type="radio" name="USER_DIV_CD" id="USER_DIV_CD_01" value="10" <%= USER_DIV_CD == "10" ? "checked" : "" %> />
                     <label class="form-check-label" for="USER_DIV_CD_01">개인</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="USER_DIV_CD" id="USER_DIV_CD_02" value="20" />
+                    <input class="form-check-input" type="radio" name="USER_DIV_CD" id="USER_DIV_CD_02" value="20" <%= USER_DIV_CD == "20" ? "checked" : "" %> />
                     <label class="form-check-label" for="USER_DIV_CD_02">기업</label>
                 </div>
                 
-                <div id="corpInfo" style="display:none">
+                <div id="corpInfo" style="<%= USER_DIV_CD == "10" ? "display:none" : "" %>">
                     <div class="form-group">
                         <label for="">회사명</label>
-                        <input type="text" class="form-control" id="CORP_NM" name="CORP_NM" placeholder="회사명" />
+                        <input type="text" class="form-control" id="CORP_NM" name="CORP_NM" placeholder="회사명" value="<%= CORP_NM %>" />
                     </div>
                     <div class="form-group">
                         <label for="">사업자등록번호</label>
-                        <input type="text" class="form-control" id="BIZ_REG_NO" name="BIZ_REG_NO" placeholder="사업자등록번호">
+                        <input type="text" class="form-control" id="BIZ_REG_NO" name="BIZ_REG_NO" placeholder="사업자등록번호" value="<%= BIZ_REG_NO %>" />
                     </div>
                 </div>
                 
                 <div class="form-group row">
                     <div class="col-sm-12 text-right">
-                        <button type="submit" class="btn btn-primary">회원가입</button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                        
                     </div>
                 </div>
             </form>

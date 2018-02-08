@@ -14,7 +14,6 @@ module.exports.selectLogin = function(userId, userPw, cb) {
             cb(null, results, fields);
         }
     });
-  
 };
 
 /** Facebook 로그인 */
@@ -94,6 +93,38 @@ module.exports.insert = function(data, cb) {
   
 };
 
+/** ID 중복 체크 */
+module.exports.chkDupUserId = function(userId) {
+    
+    var promise = new Promise(function (resolve, reject) {
+
+        datasource.query("SELECT COUNT(1) AS CNT FROM COM_USER WHERE USER_ID = ?", [userId], function(err, results, fields) {
+            
+            if(err) {
+                err.userMsg = tblNm + " 조회 중 오류 발생";
+                reject(err);
+                
+            } else {
+            
+                let chkRet = false;
+                
+                if (results.length == 0) {
+                    chkRet = true;
+                } else {
+                    if (results[0]["CNT"] <= 0) {
+                        chkRet = true;
+                    }
+                }
+            
+                resolve(chkRet);
+            }
+
+        });
+    });
+    
+    return promise;
+};
+
 /** 이메일 중복 체크 */
 module.exports.chkDupEmalAddr = function(emalAddr) {
     
@@ -124,4 +155,57 @@ module.exports.chkDupEmalAddr = function(emalAddr) {
     });
     
     return promise;
+};
+
+/** 회원 정보 조회 */
+module.exports.select = function(userId, cb) {
+    
+    datasource.query("SELECT * FROM COM_USER WHERE USER_ID = ? ", [userId], function(err, results, fields) {
+        
+        if(err) {
+            err.userMsg = tblNm + " 조회 중 오류 발생";
+            cb(err);
+        } else {
+            if (results && results.length >= 1) {
+                cb(null, results[0], fields);
+            } else {
+                cb(null, {}, null);
+            }
+        }
+    });
+};
+
+/** 회원 정보 수정 */
+module.exports.update = function(userId, data, cb) {
+    
+    let where = {"USER_ID" : userId};
+    
+    let dbData = {};
+    
+    if(data["EMAL_ADDR"]) dbData["EMAL_ADDR"] = data["EMAL_ADDR"];
+    if(data["CPHN_NO"]) dbData["CPHN_NO"] = data["CPHN_NO"];
+    if(data["USER_NM"]) dbData["USER_NM"] = data["USER_NM"];
+    if(data["NATI_CD"]) dbData["NATI_CD"] = data["NATI_CD"];
+    if(data["LNGG_CD"]) dbData["LNGG_CD"] = data["LNGG_CD"];
+    if(data["LIVE_AREA"]) dbData["LIVE_AREA"] = data["LIVE_AREA"];
+    if(data["BITH"]) dbData["BITH"] = data["BITH"];
+    if(data["PRFL_FILE_SEQ"]) dbData["PRFL_FILE_SEQ"] = data["PRFL_FILE_SEQ"];
+    if(data["USER_DIV_CD"]) dbData["USER_DIV_CD"] = data["USER_DIV_CD"];
+    if(data["CORP_NM"]) dbData["CORP_NM"] = data["CORP_NM"];
+    if(data["BIZ_REG_NO"]) dbData["BIZ_REG_NO"] = data["BIZ_REG_NO"];
+    if(data["UPT_USER_ID"]) dbData["UPT_USER_ID"] = data["UPT_USER_ID"];
+    
+    datasource.update("COM_USER", dbData, where, function(err, results, fields) {
+        
+        if(err) {
+            err.userMsg = tblNm + " 조회 중 오류 발생";
+            cb(err);
+        } else {
+            if (results && results.length >= 1) {
+                cb(null, results[0], fields);
+            } else {
+                cb(null, {}, null);
+            }
+        }
+    });
 };
