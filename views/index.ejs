@@ -29,7 +29,7 @@
                         let item = locals.catCd[key];
                         %>
                     <div class="col-lg-3" style="margin-top:20px;">
-                        <h3><a class="nav-link" href="/sel/selMst?cat=<%= item["CD_VAL"] %>"><%= item["CD_NM"] %></a></h3>
+                        <h3><a class="nav-link" href="/sel/selMst/<%= item["CD_VAL"] %>"><%= item["CD_NM"] %></a></h3>
                         <img class="rounded-squre" src="/img/cat/<%= item["CD_VAL"] %>.png" onerror="this.src='/img/cat/99.png'" alt="Generic placeholder image" width="140" height="140" />
                     </div><!-- /.col-lg-3 -->
                 <% }

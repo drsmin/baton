@@ -12,7 +12,7 @@ function openRegImgPop(div, width, height) {
         height = "1";
     }
     
-    window.open("/sys/pop/regImgPop/" + div + "/" + width + "/" + height,'sendMsgPop','width='+ 900 +',height='+ 800 +'');
+    window.open("/sys/pop/regImgPop/" + div + "/" + width + "/" + height,'sendMsgPop','width='+ 900 +',height='+ 700 +'');
 }
 
 function openRegMovPop(div) {

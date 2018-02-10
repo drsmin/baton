@@ -5,7 +5,7 @@ const tblNm = "판매 마스터";
 /** 리스트 조회 */
 module.exports.selectList = function(where, pageInfo, orderby, cb) {
     
-    let sql = "SELECT SVC_SEQ, SEL_USER_ID, SVC_STAT_CD, SVC_TITL, CAT_CD, SVC_TYPE, SVC_DTL, SVC_AS, SVC_REQ_DTL, RJCT_CTNT, REG_USER_ID, REG_DTTM, UPT_USER_ID, UPT_DTTM  FROM SVC_SEL_MST WHERE 1=1 ";
+    let sql = "SELECT SVC_SEQ, SEL_USER_ID, SVC_STAT_CD, SVC_TITL, CAT_CD, (SELECT CD_NM FROM SYS_CD_DTL C WHERE C.CD_GRP = 'CAT_CD' AND C.CD_VAL = CAT_CD) AS CAT_NM, SVC_TYPE, SVC_DTL, SVC_AS, SVC_REQ_DTL, RJCT_CTNT, REG_USER_ID, REG_DTTM, UPT_USER_ID, UPT_DTTM  FROM SVC_SEL_MST WHERE 1=1 ";
     
     let sParam = [];
     

@@ -17,7 +17,7 @@
                     let tr = $(_tr.get(0).outerHTML);
                     
                     tr.find("input").val("");
-                    tr.children().first().html(rows + 1)
+                    tr.children().first().text(rows + 1).append($('<input type="hidden" name="GODS_SEQ" value="" />'));
                     
                     tbody.append(tr);
                 });
@@ -25,7 +25,27 @@
             });
             
             function _onsubmit() {
+                if (!document.forms["frmMain"].GODS_NM) {
+                    alert("상품은 최소 1개 이상 등록해야 합니다.");
+                    return false;
+                }
+            }
+            
+            function delRow(e) {
                 
+                if (confirm("삭제 하시겠습니까?") == false) {
+                    return false;
+                }
+                
+                if($("input[name='GODS_SEQ']").length <= 1) {
+                    
+                    alert("모든 행을 삭제할 수 없습니다.");
+                    return;
+                }
+                
+                _this = $(e);
+                
+                _this.parent("td").parent("tr").remove();
             }
         </script>
     </head>
@@ -51,7 +71,7 @@
                 </div><!-- row -->
             </nav>
             <div class="mr30"></div>
-            <form action="/sel/selReg3" method="post" onsubmit="return _onsubmit()">
+            <form action="/sel/selReg3" name="frmMain" method="post" onsubmit="return _onsubmit()">
                 <input type="hidden" id="SVC_SEQ" name="SVC_SEQ" value="<%= SVC_SEQ%>" />
                 <div class="form-group row">
                     <div class="col-sm-12 text-right">
@@ -65,6 +85,7 @@
                             <th scope="col">상품명</th>
                             <th scope="col">단가</th>
                             <th scope="col">설명</th>
+                            <th scope="col">#</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,6 +99,7 @@
                             <td><input type="text" class="form-control" name="GODS_NM" value="<%= item["GODS_NM"] %>" required /></td>
                             <td><input type="number" class="form-control" name="GODS_UPRC" value="<%= item["GODS_UPRC"] %>" required /></td>
                             <td><input type="text" class="form-control" name="GODS_DTL" value="<%= item["GODS_DTL"] %>" /></td>
+                            <td><button type="button" class="btn btn-danger" onclick="delRow(this)"><i class="fa fa-trash-o"></i></button></td>
                         </tr>
                         <% }
                         } else { %>
@@ -86,6 +108,7 @@
                             <td><input type="text" class="form-control" name="GODS_NM" value="" required /></td>
                             <td><input type="number" class="form-control" name="GODS_UPRC" value="" required /></td>
                             <td><input type="text" class="form-control" name="GODS_DTL" value="" /></td>
+                            <td><button type="button" class="btn btn-danger" onclick="delRow(this)"><i class="fa fa-trash-o"></i></button></td>
                         </tr>
                         <% } %>
                     </tbody>

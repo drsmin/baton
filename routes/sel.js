@@ -8,13 +8,13 @@ const svcSelImg = require(__base + "/model/svc/svcSelImg.js");
 const svcSelMov = require(__base + "/model/svc/svcSelMov.js");
 
 /** 판매 메인 */
-router.get('/selMst', function(req, res, next) {
+router.get('/selMst/:cat', function(req, res, next) {
     
     let promises = [];
     
     let rParam = {};
     
-    let catCd = req.query.cat;
+    let catCd = req.params.cat;
     
     //페이지
     let page = req.query.page || 1;
@@ -94,9 +94,77 @@ router.get('/selMst', function(req, res, next) {
 });
 
 /** 판매 상세 */
-router.get('/selDtl', function(req, res, next) {
+router.get('/selDtl/:svcSeq', function(req, res, next) {
     
-    console.log("selTitle %s", req.query.selTitle);
+    let svcSeq = req.params.svcSeq;
+    
+    let rParam = {};
+
+    let promises = [];
+    
+    let promise1 = getSvcMst(req.params.svcSeq);
+    
+    promises.push(promise1);
+        
+    promise1.then(function (result) {
+        
+        rParam = Object.assign(rParam, result);
+    });
+    
+    let promise2 = new Promise(function (resolve, reject) {
+        
+        svcSelGods.selectList({"SVC_SEQ" : svcSeq }, " ORDER BY SVC_SEQ, GODS_SEQ ", function (err, results) {
+            
+            if (err) {
+                //reject(err);
+                next(err, req, res);
+                
+            } else {
+                rParam["list"] = results;
+                resolve({});
+            }
+            
+        });
+        
+    });
+    
+    promises.push(promise2);
+    
+    let promise3 = new Promise(function (resolver, reject) {
+        svcSelImg.selectList({"SVC_SEQ" : svcSeq}, null, function (err, results) {
+            
+            if (err) {
+                next(err, req, res);
+            } else {
+                rParam["list2"] = results;
+                resolver();
+            }
+            
+        });
+    });
+    
+    promises.push(promise3);
+    
+    let promise4 = new Promise(function (resolver, reject) {
+        svcSelMov.selectList({"SVC_SEQ" : svcSeq}, null, function (err, results) {
+            
+            if (err) {
+                next(err, req, res);
+            } else {
+                rParam["list3"] = results;
+                resolver();
+            }
+            
+        });
+    });
+    
+    promises.push(promise4);
+    
+    Promise.all(promises).then(function () {
+        
+        res.render('sel/selDtl', rParam);
+	   
+    });
     
     res.render("sel/selDtl", {"selTitle" : req.query.selTitle});
 });

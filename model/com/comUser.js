@@ -126,11 +126,20 @@ module.exports.chkDupUserId = function(userId) {
 };
 
 /** 이메일 중복 체크 */
-module.exports.chkDupEmalAddr = function(emalAddr) {
+module.exports.chkDupEmalAddr = function(emalAddr, userId) {
+    
+    let sql = "SELECT COUNT(1) AS CNT FROM COM_USER WHERE EMAL_ADDR = ?";
+    let sParam = [];
+    sParam.push(emalAddr);
+    
+    if (userId) {
+        sql += " AND USER_ID <> ?";
+        sParam.push(userId);
+    }
     
     var promise = new Promise(function (resolve, reject) {
 
-        datasource.query("SELECT COUNT(1) AS CNT FROM COM_USER WHERE EMAL_ADDR = ?", [emalAddr], function(err, results, fields) {
+        datasource.query(sql, sParam, function(err, results, fields) {
             
             if(err) {
                 err.userMsg = tblNm + " 조회 중 오류 발생";
@@ -178,13 +187,12 @@ module.exports.select = function(userId, cb) {
 /** 회원 정보 수정 */
 module.exports.update = function(userId, data, cb) {
     
-    let where = {"USER_ID" : userId};
-    
     let dbData = {};
     
     if(data["EMAL_ADDR"]) dbData["EMAL_ADDR"] = data["EMAL_ADDR"];
     if(data["CPHN_NO"]) dbData["CPHN_NO"] = data["CPHN_NO"];
     if(data["USER_NM"]) dbData["USER_NM"] = data["USER_NM"];
+    if(data["USER_PW"]) dbData["USER_PW"] = data["USER_PW"];
     if(data["NATI_CD"]) dbData["NATI_CD"] = data["NATI_CD"];
     if(data["LNGG_CD"]) dbData["LNGG_CD"] = data["LNGG_CD"];
     if(data["LIVE_AREA"]) dbData["LIVE_AREA"] = data["LIVE_AREA"];
@@ -195,17 +203,46 @@ module.exports.update = function(userId, data, cb) {
     if(data["BIZ_REG_NO"]) dbData["BIZ_REG_NO"] = data["BIZ_REG_NO"];
     if(data["UPT_USER_ID"]) dbData["UPT_USER_ID"] = data["UPT_USER_ID"];
     
-    datasource.update("COM_USER", dbData, where, function(err, results, fields) {
+    if (dbData["BITH"]) {
+        dbData["BITH"] = dbData["BITH"].replace(/\-/gi, "");
+    }
+    
+    let sql = "UPDATE COM_USER SET ";
+    
+    let idx = 0;
+    let sParam = [];
+    
+    for (let key in dbData) {
+        
+        let val = dbData[key];
+        
+        if (idx != 0) {
+            sql += ", ";
+        }
+        
+        sql += " " + key + " = ";
+        
+        if ("USER_PW" == key) {
+            sql += " PASSWORD(?) ";
+        } else {
+            sql += " ? ";
+        }
+        
+        sParam.push(val);
+        
+        idx ++;
+    }
+    
+    sql += " WHERE USER_ID = ? ";
+    sParam.push(userId);
+    
+    datasource.query(sql, sParam, function(err, results, fields) {
         
         if(err) {
-            err.userMsg = tblNm + " 조회 중 오류 발생";
+            err.userMsg = tblNm + " 갱신 중 오류 발생";
             cb(err);
         } else {
-            if (results && results.length >= 1) {
-                cb(null, results[0], fields);
-            } else {
-                cb(null, {}, null);
-            }
+            cb(null, results, fields);
         }
     });
 };

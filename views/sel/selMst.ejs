@@ -63,19 +63,32 @@
                         
                         for (let idx = 0, _max = list.length ; idx < _max ; idx ++) {
                             let item = list[idx];
+                            
+                            let imgSrc = "data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==";
+                            
+                            if (item["ATTC_FILE_SEQ"] && item["ATTC_FILE_SEQ"] != "") {
+                                imgSrc = "/imgView/" + item["ATTC_FILE_SEQ"];
+                            }
+                            
+                            let prfSrc = "data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==";
+                            
+                            if (item["PRFL_FILE_SEQ"] && item["PRFL_FILE_SEQ"] != "") {
+                                prfSrc = "/imgView/" + item["PRFL_FILE_SEQ"];
+                            }
+                            
                         %>
                     <div class="col-sm-3">
                         <div class="row">
                             <div class="col-sm">
                                 <a href="/sel/selDtl/<%= item["SVC_SEQ"] %>">
-                                <img class="Thumbnail" src="/imgView/<%= item["ATTC_FILE_SEQ"] %>" width="160" height="90" alt="썸네일" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=='">
+                                <img class="Thumbnail" src="<%= imgSrc %>" width="160" height="90" alt="썸네일" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=='">
                                 </a>
                             </div>
                         </div>
                         <div class="mr10"></div>
                         <div class="row">
                             <div class="col-sm">
-                                <img class="rounded-circle" src="/imgView/<%= item["PRFL_FILE_SEQ"] %>" alt="프리랜서" width="70" height="70" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=='"> <%= item["USER_NM"] %>
+                                <img class="rounded-circle" src="<%= prfSrc %>" alt="프리랜서" width="70" height="70" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=='"> <%= item["USER_NM"] %>
                             </div>
                         </div>
                         <div class="mr10"></div>

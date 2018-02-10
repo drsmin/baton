@@ -47,6 +47,7 @@
                 <thead>
                     <tr>
                         <th scope="col">서비스번호</th>
+                        <th scope="col">카테고리</th>
                         <th scope="col">서비스명</th>
                         <th scope="col">등록자</th>
                         <th scope="col">등록 일시</th>
@@ -63,6 +64,7 @@
                             let row = list[idx]; %>
                     <tr style="cursor:pointer;" keyVal="<%= row["SVC_SEQ"] %>">
                         <td><%= row["SVC_SEQ"] %></td>
+                        <td><%= row["CAT_NM"] %></td>
                         <td><%= row["SVC_TITL"] %></td>
                         <td><%= row["SEL_USER_ID"] %></td>
                         <td><%= row["UPT_DTTM"] %></td>

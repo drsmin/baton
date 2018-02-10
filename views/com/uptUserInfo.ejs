@@ -7,6 +7,7 @@
         <script type="text/javascript">
             
             let dupEmalAddr = true;
+            let chkPw = true;
         
             $(document).ready(function () {
                 
@@ -18,7 +19,7 @@
                         return;
                     }
                     
-                    _sendAjax("/com/chkDupEmalAddr", {"EMAL_ADDR" : $this.val()}, function (data) {
+                    _sendAjax("/com/chkDupEmalAddr", {"EMAL_ADDR" : $this.val(), "USER_ID" : $("#USER_ID").val()}, function (data) {
                         dupEmalAddr = data;
                         
                         _validFormItem($("#EMAL_ADDR"), $("#dupEmalAddr"), "사용할 수 있는 이메일 주소 입니다", "이미 사용중인 이메일 주소 입니다", data);
@@ -39,11 +40,41 @@
                     
                 });
                 
+                $("#USER_PW, #USER_PW2").blur(function() {
+                    
+                    let pw = $("#USER_PW").val();
+                    let pw2 = $("#USER_PW2").val();
+                    
+                    if (pw == "" && pw2 == "") {
+                        chkPw = true;
+                    }
+                    
+                    if (pw == pw2) {
+                        chkPw = true;
+                    } else {
+                        chkPw = false;
+                    }
+                    
+                    _validFormItem($("#USER_PW, #USER_PW2"), $("#chkPw"), "비밀번호가 일치합니다", "비밀번호가 일치하지 않습니다", chkPw);
+                    
+                });
+                
             });
             
+            
             function _onsubmit() {
+                
+                if (confirm("수정하시겠습니까?") == false) {
+                    return false;
+                }
+                
                 if (dupEmalAddr == false) {
                     alert("이메일 중복 체크가 실패 했습니다.");
+                    return false;
+                }
+                
+                if (chkPw == false) {
+                    alert("패스워드 체크가 실패 했습니다.");
                     return false;
                 }
             }
@@ -67,7 +98,7 @@
                 <% if ("10" == SNS_DIV_CD) { %>
                 <div class="form-group">
                     <label for="USER_ID">아이디</label>
-                    <input type="email" class="form-control" id="USER_ID" name="USER_ID" aria-describedby="emailHelp" placeholder="아이디" value="<%= USER_ID %>" required disabled />
+                    <input type="email" class="form-control" id="USER_ID" name="USER_ID" aria-describedby="emailHelp" placeholder="아이디" value="<%= USER_ID %>" required readonly />
                 </div>
                 <% } %>
                 <div class="form-group">
@@ -82,6 +113,7 @@
                 <div class="form-group">
                     <label for="USER_PW2">비밀번호 확인</label>
                     <input type="password" class="form-control" id="USER_PW2" name="USER_PW2" placeholder="비밀번호확인" />
+                    <div id="chkPw"></div>
                 </div>
                 <div class="form-group">
                     <label for="imgPRFL_FILE_SEQ">프로필 사진</label>
@@ -92,7 +124,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">이름</label>
-                    <input type="text" class="form-control" id="USER_NM" name="USER_NM" placeholder="이름" <%= USER_NM %> required />
+                    <input type="text" class="form-control" id="USER_NM" name="USER_NM" placeholder="이름" value="<%= USER_NM %>" required />
                 </div>
                 <div class="form-row">
                     <div class="col-sm-6">

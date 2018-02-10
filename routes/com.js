@@ -74,7 +74,7 @@ router.post("/joinUser", function (req, res, next) {
     
 });
 
-/** 이메일 중복 체크 */
+/** ID 중복 체크 */
 router.post("/chkDupUserId", function (req, res, next) {
     
     comUser.chkDupUserId(req.body.USER_ID).then(function (results) {
@@ -85,7 +85,7 @@ router.post("/chkDupUserId", function (req, res, next) {
 /** 이메일 중복 체크 */
 router.post("/chkDupEmalAddr", function (req, res, next) {
     
-    comUser.chkDupEmalAddr(req.body.EMAL_ADDR).then(function (results) {
+    comUser.chkDupEmalAddr(req.body.EMAL_ADDR, req.body.USER_ID).then(function (results) {
         res.send(results);
     });
 });
@@ -101,7 +101,7 @@ router.get("/logout", function (req, res, next) {
             
             if(err) {
                 //console.log(err);
-                return next(err, req, res);
+                next(err, req, res);
             } else {
                 res.redirect('/');
             }
@@ -180,6 +180,13 @@ router.get('/uptUserInfo', commUtil.chkLogin, function(req, res, next) {
                 next(err, req, res);
                 reject();
             } else {
+                
+                let bith = results["BITH"];
+                
+                if (bith && bith.length == 8) {
+                    results["BITH"] = bith.replace(/(\d{4})(\d{2})(\d{2})/,"$1-$2-$3");
+                }
+                
                 Object.assign(rParam, results);
                 resolver();
             }
@@ -200,8 +207,20 @@ router.get('/uptUserInfo', commUtil.chkLogin, function(req, res, next) {
 /** 회원 정보 수정 */
 router.post('/uptUserInfo', commUtil.chkLogin, function(req, res, next) {
     
-    comUser.upate
-}
+    //비밀번호를 변경하지 않는 경우 삭제
+    if (!req.body.USER_PW || req.body.USER_PW == "") {
+        delete req.body.USER_PW;
+    }
+    
+    comUser.update(req.body.USER_ID, req.body, function (err, results) {
+        
+        if (err) {
+            next(err, req, res);
+        } else {
+            res.redirect("/");
+        }
+    });
+});
 
 /** 기본 라우터 */
 commUtil.commRoute("com/", router);
