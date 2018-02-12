@@ -14,6 +14,38 @@
                 });
                 
             });
+            
+            function chgImg(attcFileSeq) {
+                $("#mainImg").attr("src", "/imgView/" + attcFileSeq);
+            }
+            
+            function chgCnt(cnt) {
+                let _this = $(cnt);
+                
+                if (_this.val() <= -1) {
+                    _this.val(0);
+                }
+                
+                let row = _this.parent().parent();
+                let uprc = row.find("input[name='GODS_UPRC']").val() * 1;
+                
+                row.find("input[name='GODS_SUM']").val((_this.val() * uprc));
+                
+                calcTotSum();
+            }
+            
+            function calcTotSum() {
+                
+                let sum = 0;
+                
+                $("input[name='GODS_SUM']").each(function () {
+                    
+                    sum += (this.value * 1);
+                    
+                });
+                
+                $("#GODS_TOT_SUM").val(sum);
+            }
         </script>
     </head>
 <body>
@@ -46,58 +78,38 @@
             <div class="mr30"></div>
             <div class="row">
                 <div class="col-sm-8">
-                    <h1 id="m1"><%= selTitle %></h1>
+                    <h1 id="m1"><%= SVC_TITL %></h1>
+                    <!--
                     <div class="rating display-only">
                         <input type="hidden" class="star-rating-input align-middle" value="5">
                         <% include com/inc/_starRatingSpan %>
                     </div> 
                     <span class="align-top text-secondary">(777)</span>
                     <span class="align-top text-secondary">15 Orders in Queue</span>
-                    
+                    -->
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">Video & Animation</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Animated Logos</li>
+                            <li class="breadcrumb-item"><a href="/sel/selMst/<%= CAT_CD %>"><%= CAT_NM %></a></li>
                         </ol>
                     </nav>
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="100%" height="400px" >
+                    <% if (typeof(list2) && list2.length > 0) {
+                        let fItem = list2[0];%>
+                    <img src="/imgView/<%= fItem["ATTC_FILE_SEQ"] %>" width="100%" height="400px" id="mainImg" />
                     <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
                         <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample10">
                             <ul class="navbar-nav">
+                                <% for (let idx = 0, _max = list2.length ; idx < _max ; idx ++) {
+                                    let item = list2[idx]; %>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <img alt="Thumbnail [100%x280]" style="height: 80px; width: 80%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22356%22%20height%3D%22280%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20356%20280%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_160fe7bce5d%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A18pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_160fe7bce5d%22%3E%3Crect%20width%3D%22356%22%20height%3D%22280%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22117.34375%22%20y%3D%22148.1%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"/>
+                                    <a class="nav-link" href="#" onclick="chgImg(<%=item["ATTC_FILE_SEQ"] %>)">
+                                        <img alt="Thumbnail [100%x280]" style="height: 90px; width: 160px; display: block;" src="/imgView/<%= item["ATTC_FILE_SEQ"] %>"/>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <img alt="Thumbnail [100%x280]" style="height: 80px; width: 80%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22356%22%20height%3D%22280%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20356%20280%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_160fe7bce5d%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A18pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_160fe7bce5d%22%3E%3Crect%20width%3D%22356%22%20height%3D%22280%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22117.34375%22%20y%3D%22148.1%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"/>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <img alt="Thumbnail [100%x280]" style="height: 80px; width: 80%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22356%22%20height%3D%22280%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20356%20280%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_160fe7bce5d%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A18pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_160fe7bce5d%22%3E%3Crect%20width%3D%22356%22%20height%3D%22280%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22117.34375%22%20y%3D%22148.1%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"/>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <img alt="Thumbnail [100%x280]" style="height: 80px; width: 80%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22356%22%20height%3D%22280%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20356%20280%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_160fe7bce5d%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A18pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_160fe7bce5d%22%3E%3Crect%20width%3D%22356%22%20height%3D%22280%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22117.34375%22%20y%3D%22148.1%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"/>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <img alt="Thumbnail [100%x280]" style="height: 80px; width: 80%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22356%22%20height%3D%22280%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20356%20280%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_160fe7bce5d%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A18pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_160fe7bce5d%22%3E%3Crect%20width%3D%22356%22%20height%3D%22280%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22117.34375%22%20y%3D%22148.1%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"/>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <img alt="Thumbnail [100%x280]" style="height: 80px; width: 80%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22356%22%20height%3D%22280%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20356%20280%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_160fe7bce5d%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A18pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_160fe7bce5d%22%3E%3Crect%20width%3D%22356%22%20height%3D%22280%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22117.34375%22%20y%3D%22148.1%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"/>
-                                    </a>
-                                </li>
+                                <% } %>
                             </ul>
                         </div>
                     </nav>
-                    
+                    <% } %>
                     <hr/>
                     <h2 id="m2">상품정보</h2>
                     
@@ -111,19 +123,17 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <% if (typeof(list) && list.length > 0) {
+                                for (let idx = 0, _max = list.length ; idx < _max ; idx ++) {
+                                    let item = list[idx]; %>
                             <tr>
-                                <th scope="row">1</th>
-                                <td>일급</td>
-                                <td>\250,000</td>
-                                <td>일당</td>
+                                <th scope="row"><%= idx + 1 %></th>
+                                <td><%= item["GODS_NM"] %></td>
+                                <td><%= item["GODS_UPRC"] %></td>
+                                <td><%= item["GODS_DTL"] %></td>
                             </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>시급</td>
-                                <td>\50,000</td>
-                                <td>한시간 시급</td>
-                                
-                            </tr>
+                            <% }
+                            } %>
                         </tbody>
                     </table>
                 </div> <!-- col -->
@@ -131,32 +141,54 @@
                     <p class="card-text">
                     <h3>상품선택</h3>
                     </p>
-                    <p class="card-text">일급 X 5 = \ 1,250,000</p>
-                    <p class="card-text">시급 X 5 = \ 250,000</p>
-                    <p class="card-text">합계 = \ 1,500,000</p>
-                    <p class="card-text">
-                        <button type="button" class="btn btn-success" id="btnPay">구매</button>
-                    </p>
+                    <form class="form">
+                        <% if (typeof(list) && list.length > 0) {
+                            for (let idx = 0, _max = list.length ; idx < _max ; idx ++) {
+                                let item = list[idx]; %>
+                        <div class="form-row">
+                            <div class="form-group col-sm-4">
+                                <label for=""><%= item["GODS_NM"] %></label>
+                                <input type="hidden" name="SVC_SEQ" value="<%= item["SVC_SEQ"] %>" />
+                                <input type="hidden" name="GODS_SEQ" value="<%= item["GODS_SEQ"] %>" />
+                                <input type="text" name="GODS_UPRC" class="form-control" value="<%= item["GODS_UPRC"] %>" readonly />
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label for="">수량</label>
+                                <input type="number" name="GODS_CNT" class="form-control" value="0" onchange="chgCnt(this)" />
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label for="">계</label>
+                                <input class="form-control" name="GODS_SUM" type="text" value="0" name="" readonly />
+                            </div>
+                        </div>
+                        <% }
+                        } %>
+                        <div class="form-row">
+                            <div class="form-group col-sm">
+                                <label for="">합계</label>
+                                <input type="text" class="form-control" id="GODS_TOT_SUM" value="0" readonly />
+                            </div>
+                        </div>
+                        <p class="card-text">
+                            <button type="button" class="btn btn-success" id="btnPay">구매</button>
+                        </p>
+                        
+                    </form>
                     <p class="card-text"></p>
                 </div><!--col-->
             </div><!--row-->
             <div class="row">
                 <div class="col-sm">
                     <h2 id="m3">상세정보</h2>
-                    <textarea readonly class="form-control" style="width: 100%" rows="20">
-상세 정보입니다.
-블라블라블라
-                    </textarea>
+                    <textarea readonly class="form-control" style="width: 100%" rows="20"><%= SVC_DTL %></textarea>
                     
                     <hr/>
                     <h2 id="m4">A/S</h2>
-                    <textarea readonly class="form-control" style="width: 100%" rows="10">
-A/S 정보입니다.
-블라블라블라
-                    </textarea>
+                    <textarea readonly class="form-control" style="width: 100%" rows="10"><%= SVC_AS %></textarea>
                     
                     <hr/>
                     <h2 id="m5">리뷰/후기</h2>
+                    <!--
                     <div class="col-sm ">
                         <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="프리랜서" width="70" height="70">
                         구매자1
@@ -169,6 +201,7 @@ A/S 정보입니다.
                             블라블라블라블라블라
                         </div>
                     </div>
+                    -->
                 </div>
             </div><!--row-->
             

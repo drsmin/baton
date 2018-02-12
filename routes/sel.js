@@ -104,12 +104,21 @@ router.get('/selDtl/:svcSeq', function(req, res, next) {
     
     let promise1 = getSvcMst(req.params.svcSeq);
     
-    promises.push(promise1);
-        
     promise1.then(function (result) {
         
-        rParam = Object.assign(rParam, result);
+        if (result) {
+        
+            rParam = Object.assign(rParam, result);
+        } else {
+            
+            req.flash("__msg", "삭제되었거나 종료 된 서비스 입니다");
+            res.redirect('/');
+            return;
+        }
+
     });
+    
+    promises.push(promise1);
     
     let promise2 = new Promise(function (resolve, reject) {
         
@@ -162,11 +171,11 @@ router.get('/selDtl/:svcSeq', function(req, res, next) {
     
     Promise.all(promises).then(function () {
         
+        console.log(rParam);
+        
         res.render('sel/selDtl', rParam);
 	   
     });
-    
-    res.render("sel/selDtl", {"selTitle" : req.query.selTitle});
 });
 
 /** 판매등록1 */
@@ -671,7 +680,7 @@ function getSvcMst(svcSeq) {
                 
                 resolve(results[0]);
             } else {
-                resolve({});
+                resolve();
             }
     
         })

@@ -19,7 +19,7 @@ function openRegMovPop(div) {
     window.open("/sys/pop/regMovPop/" + div,'sendMsgPop','width='+ 700 +',height='+ 500 +'');
 }
 
-isloading = {
+var isloading = {
 	start : function() {
 		if (document.getElementById('wfLoading')) {
 			return;
@@ -39,7 +39,7 @@ isloading = {
 			ele.remove();
 		}
 	}
-}
+};
 
 function _viewLoading() {
 
